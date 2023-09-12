@@ -1,0 +1,15 @@
+{
+  "name": "trekbill/appx",
+  "description": "appx",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+      {
+          "name": "Bill Dickson",
+          "email": "trekbill@gmail.com"
+      }
+  ],
+  "require": {
+      "bcosca/fatfree-core": "^3.8"
+  }
+}
