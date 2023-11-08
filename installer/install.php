@@ -14,7 +14,6 @@
           <?php
           require('./../api/vendor/autoload.php');
           use \Brick\Money\Money;
-          //TODO use brick/money (also get it in there with composer
           require('lib/init_sql.php');
           require('lib/Validate.php');
           
@@ -102,7 +101,7 @@
             fwrite( $f, $s );
 
 
-            //  run the query to dropthe accounts table
+            //  run the query to drop the accounts table
             $stmt = $pdo->prepare( $drop_accounts_sql );
             if( $execute = $stmt->execute() ) {
               echo "<p>Accounts table dropped . . .</p>";

@@ -26,14 +26,18 @@
 </template>
 
 <script setup>
-  import { RouterLink, RouterView } from 'vue-router'
+  import { RouterView } from 'vue-router'
 
+  //  this is the magic that makes the dark/light toggle possible
   import { useDark, useToggle } from '@vueuse/core'
   const isDark = useDark()
+  //  the ui experience triggers this
+  //  we add class="dark" to index.html to make this work
   const toggleDark = useToggle(isDark)
 
   import { ref } from 'vue'
 
+  //  use this place to load initial data and hydrate stores
   const dataLoaded = ref(true)
 
 </script>
