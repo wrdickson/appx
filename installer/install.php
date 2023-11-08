@@ -67,9 +67,8 @@
             echo '<p>Connected to database.  Continue with installation . . . </p>';
 
             /**
-             * if it passes, write the config file
+             * if pdo passes, write the config file
              */
-            echo "<p>Creating config directory . . .</p>";
             echo "<p>Writing config file . . .</p>";
             $f = fopen("../api/config/config.php", "w");
             fwrite( $f, "<?php\n");
@@ -138,8 +137,6 @@
             if( $stmt->execute() ) {
               echo "<p>Options table created . . .</p>";
             }
-
-            //  TODO insert currency data into options
 
             // insert site_name into options . . .
             $stmt = $pdo->prepare("INSERT INTO options ( option_name, option_value, autoload ) VALUES ( :name, :value, 1 )");

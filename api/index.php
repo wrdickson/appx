@@ -17,6 +17,8 @@ $f3->set('DB', $db);
 // autoload the controllers and models into the $f3 object
 $f3->set('AUTOLOAD', 'controller/');
 
+//  ITERATE THEM ROUTES . . .
+
 $f3->route('GET /test', 'Test_Controller->index');
 
 $f3->route('GET /test/do-something', 'Test_Controller->do_something');
