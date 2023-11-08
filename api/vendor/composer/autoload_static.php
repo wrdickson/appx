@@ -6,6 +6,25 @@ namespace Composer\Autoload;
 
 class ComposerStaticInite991d96ab9e9db3c4046a004b3d00991
 {
+    public static $prefixLengthsPsr4 = array (
+        'B' => 
+        array (
+            'Brick\\Money\\' => 12,
+            'Brick\\Math\\' => 11,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Brick\\Money\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brick/money/src',
+        ),
+        'Brick\\Math\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brick/math/src',
+        ),
+    );
+
     public static $classMap = array (
         'Audit' => __DIR__ . '/..' . '/bcosca/fatfree-core/audit.php',
         'Auth' => __DIR__ . '/..' . '/bcosca/fatfree-core/auth.php',
@@ -54,6 +73,8 @@ class ComposerStaticInite991d96ab9e9db3c4046a004b3d00991
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInite991d96ab9e9db3c4046a004b3d00991::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite991d96ab9e9db3c4046a004b3d00991::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInite991d96ab9e9db3c4046a004b3d00991::$classMap;
 
         }, null, ClassLoader::class);

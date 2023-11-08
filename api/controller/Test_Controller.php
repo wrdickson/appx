@@ -4,7 +4,7 @@ Class Test_Controller {
 
   public function index ( $f3 ) {
     
-    $test = new DB\SQL\Mapper($f3->get('DB'),'test');
+    $test = new DB\SQL\Mapper($f3->get('DB'),'options');
     $all_test = $test->find();
 
     $response = array();

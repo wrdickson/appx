@@ -15,7 +15,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': 'http://localhost/appx/'
+      '/api': 'http://localhost/appx-installer/'
     }
   },
   base: ''

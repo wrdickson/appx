@@ -10,7 +10,7 @@
       }
   ],
   "require": {
-      "bcosca/fatfree-core": "^3.8",
+    "bcosca/fatfree-core": "^3.8",
     "brick/money": "^0.8.1"
   }
 }
