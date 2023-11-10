@@ -10,6 +10,7 @@
           <el-menu-item index="/">Home</el-menu-item>
           <el-menu-item index="/test">Test</el-menu-item>
           <el-menu-item index="/ref-reactive">Ref-Reactive</el-menu-item>
+          <el-menu-item index="props-play">Props</el-menu-item>
           <div class="flex-grow"></div>
           <el-button size="small" @click="toggleDark()">
             Is Dark: {{ isDark }}
