@@ -2,6 +2,10 @@
 
 require 'vendor/autoload.php';
 require 'config/config.php';
+require 'lib/Auth.php';
+require 'lib/DataConnector.php';
+require 'lib/F3Auth.php';
+
 
 //  instantiate $f3 
 $f3 = \Base::instance();
@@ -22,6 +26,13 @@ $f3->set('AUTOLOAD', 'controller/');
 $f3->route('GET /test', 'Test_Controller->index');
 
 $f3->route('GET /test/do-something', 'Test_Controller->do_something');
+
+//  AUTH
+$f3->route('POST /login', 'Auth_Controller->login');
+$f3->route('POST /authorize-token', 'Auth_Controller->authorize_token');
+
+//  Options
+$f3->route('GET /autoload-options', 'Options_Controller->get_autoload_options');
 
 //  start the router
 $f3->run();

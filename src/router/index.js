@@ -12,12 +12,12 @@ const router = createRouter({
     {
       path: '/test',
       name: 'test',
-      component: () => import('/src/views/Test.vue')
+      component: () => import('@/views/Test.vue')
     },
     {
       path: '/ref-reactive',
       name: 'refreactive',
-      component: () => import('/src/views/RefReactive.vue')
+      component: () => import('@/views/RefReactive.vue')
     },
     {
       path: '/props-play',

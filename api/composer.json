@@ -10,7 +10,8 @@
       }
   ],
   "require": {
-      "bcosca/fatfree-core": "^3.8",
-    "brick/money": "^0.8.1"
+    "bcosca/fatfree-core": "^3.8",
+    "brick/money": "^0.8.1",
+    "firebase/php-jwt": "^6.8"
   }
 }
