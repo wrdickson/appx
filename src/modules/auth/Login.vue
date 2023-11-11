@@ -35,7 +35,7 @@
 
 <script>
 import { ElMessage } from 'element-plus'
-import authData from './data.js'
+import { authData } from './data.js'
 import { authStore } from './store.js'
 
 export default {
