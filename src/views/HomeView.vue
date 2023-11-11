@@ -2,11 +2,14 @@
   <h1>Home</h1>
   <h2>i18n/ localization tests:</h2>
   <div>{{howdy}}</div>
+  <el-config-provider :locale="locale">
+    <el-date-picker
+        v-model="sel"
+        type="date"
+        size="small"
+      />
+  </el-config-provider>
   <hr/>
-    <el-config-provider :locale="locale">
-      <el-table mb-1 :data="[]" />
-      <el-pagination :total="100" />
-    </el-config-provider>
 </template>
 
 <script setup>
@@ -21,8 +24,10 @@
     return t('message.hello')
   })
 
+  const sel = ref(null)
+
   const locale = computed( () => {
-    return lStore.selectedLocale
+    return localeStore().selectedLocale
   })
 
 </script>

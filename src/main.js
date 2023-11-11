@@ -11,26 +11,45 @@ import 'element-plus/theme-chalk/display.css'
 import _ from 'lodash'
 import { messages } from '@/modules/i18n/messages.js'
 
+import App from '@/App.vue'
+
 //  router
 import router from './router'
 
-//  module loader
-//  auth . . .
+//  MODULE LOADER: AUTH
 import { authRoutes } from '@/modules/auth/routes.js'
 _.each(authRoutes, route => { router.addRoute(route) })
 
-const useI18n = createI18n({
-  legacy: false, // you must set `false`, to use Composition API
-  locale: 'en', // set locale
-  fallbackLocale: 'en', // set fallback locale
-  messages // set locale messages
+//  MODULR LOADER: OPTIONS
+import { optionsData } from '@/modules/options/data.js'
+
+//  GET AND HANDLE OPTIONS DATA
+optionsData.getAutoloadOptions().then( response => {
+  //  create an object to pass to App as props
+  const optionsObj = {
+    autoloadOptions:  response.data.options
+  }
+  //  find the default_locale option
+  const optionLocale = _.find(response.data.options, o => {
+    return o.option_name == 'default_locale'
+  })
+  const defaultLocale = optionLocale.option_value
+
+  //  then, assign default_locale as we run createI81n . . .
+  const useI18n = createI18n({
+    legacy: false, // you must set `false`, to use Composition API
+    locale: defaultLocale, // set locale to option value
+    fallbackLocale: 'en', // set fallback locale
+    messages // set locale messages
+  })
+  
+  //  INSTANTIATE APP AND PASS OPTIONS PROPS
+  const app = createApp(App, optionsObj)
+  app.use(useI18n)
+  app.use(createPinia())
+  app.use(router)
+  app.use(ElementPlus)
+  app.mount('#app')
 })
 
-//  app
-import App from '@/App.vue'
-const app = createApp(App)
-app.use(useI18n)
-app.use(createPinia())
-app.use(router)
-app.use(ElementPlus)
-app.mount('#app')
+

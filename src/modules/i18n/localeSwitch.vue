@@ -15,7 +15,6 @@
 <script>
 
 import { localeStore } from '@/modules/i18n/store.js'
-import { optionsStore } from '@/modules/options/store.js'
 
 export default {
   name: 'LocaleSwitch',
@@ -35,7 +34,12 @@ export default {
   },
 
   computed: {
-
+    locale () {
+      return localeStore().selectedLocale
+    },
+    i18locale () {
+      return this.$i18n.locale
+    }
   },
 
   methods: {

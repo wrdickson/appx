@@ -32,7 +32,8 @@
 <script setup>
   import { RouterView } from 'vue-router'
   import localeSwitch from '@/modules/i18n/localeSwitch.vue'
-  import { computed, ref } from 'vue'
+  import _ from 'lodash'
+  import { computed, ref, onMounted } from 'vue'
   //  modules/auth
   import { authStore } from '@/modules/auth/store.js'
   import { authData } from '@/modules/auth/data.js'
@@ -42,14 +43,12 @@
   //  modules/locale
   import { localeStore } from '@/modules/i18n/store.js'
 
+  //  PROPS
+  const props = defineProps(['autoloadOptions'])
+
   //  REFS
   const authCompleted = ref(false)
-  const optionsLoaded = ref(false)
-
-  //  COMPUTED
-  const defaultLocaleString = computed( () => {
-    return optionsData().autoloadOptions.default_locale
-  })
+  const optionsLoaded = ref(true)
 
   //  HANDLE DARK/LIGHT TOGGLE
   //  this is the magic that makes the dark/light toggle possible
@@ -84,13 +83,22 @@
     return authStore().account
   })
 
-  //  HANDLE OPTIONS DATA
+  //  HANDLE OPTIONS DATA, WHICH IS A PROP FROM MAIN.JS
+  
   optionsData.getAutoloadOptions().then( response => {
-    console.log('OPTIONS',response)
-    console.log( optionsStore() )
-    optionsStore().setAutoloadOptions(response.data.options)
+    console.log('props @ app', props.autoloadOptions)
+    optionsStore().setAutoloadOptions(props.autoloadOptions)
     optionsLoaded.value = true
+
+    const optionLocale = _.find(props.autoloadOptions, o => {
+      return o.option_name == 'default_locale'
+    })
+    const defaultLocale = optionLocale.option_value
+    console.log('defaultLocale @ app', defaultLocale)
+    localeStore().setComponentLocale(defaultLocale)
+
   })
+  
 
   
   //  use this place to load initial data and hydrate stores
