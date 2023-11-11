@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataLoaded && optionsLoaded && authCompleted" class="main">
+  <div v-if="optionsLoaded && authCompleted" class="main">
     <el-container>
       <el-header>
         <el-menu
@@ -57,7 +57,6 @@
   //  the ui experience triggers this
   //  we add class="dark" to index.html to make this work
   const toggleDark = useToggle(isDark)
-  
 
   //  HANDLE ACCOUNT (USER)   
   const localstorageAccount = JSON.parse(localStorage.getItem('account'))
@@ -84,25 +83,13 @@
   })
 
   //  HANDLE OPTIONS DATA, WHICH IS A PROP FROM MAIN.JS
-  
-  optionsData.getAutoloadOptions().then( response => {
-    console.log('props @ app', props.autoloadOptions)
-    optionsStore().setAutoloadOptions(props.autoloadOptions)
-    optionsLoaded.value = true
-
-    const optionLocale = _.find(props.autoloadOptions, o => {
-      return o.option_name == 'default_locale'
-    })
-    const defaultLocale = optionLocale.option_value
-    console.log('defaultLocale @ app', defaultLocale)
-    localeStore().setComponentLocale(defaultLocale)
-
+  optionsStore().setAutoloadOptions(props.autoloadOptions)
+  optionsLoaded.value = true
+  const optionLocale = _.find(props.autoloadOptions, o => {
+    return o.option_name == 'default_locale'
   })
-  
-
-  
-  //  use this place to load initial data and hydrate stores
-  const dataLoaded = ref(true)
+  const defaultLocale = optionLocale.option_value
+  localeStore().setComponentLocale(defaultLocale)
 
 </script>
 
