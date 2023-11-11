@@ -13,7 +13,7 @@ export const localeStore = defineStore({
     //  note en is an object, not the selected locale string
     selectedLocale: en,
     someVar: {
-      foo: 'bar'
+      foo: 'baz'
     }
    
 }),
