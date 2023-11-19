@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -14,6 +13,8 @@ export default defineConfig({
     }
   },
   server: {
+    //  be sure to point this to the dev directory we are working in
+    //  ( difficult bug with several dev versions)
     proxy: {
       '/api': 'http://localhost/appx-installer/'
     }
