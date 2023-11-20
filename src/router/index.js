@@ -4,16 +4,19 @@ import HomeView from '../views/HomeView.vue'
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
+    //  HOME
     {
       path: '/',
       name: 'home',
       component: HomeView
     },
+    //  RESERVATIONS
     {
       path: '/create-reservation',
       name: 'create-reservation',
       component: () => import('@/views/CreateReservation/CreateReservation.vue')
     },
+    //  DEBUG
     {
       path: '/test',
       name: 'test',

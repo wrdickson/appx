@@ -10,6 +10,7 @@
   "dependencies": {
     "@vueuse/core": "^10.5.0",
     "axios": "^1.5.0",
+    "dayjs": "^1.11.10",
     "element-plus": "^2.3.12",
     "lodash": "^4.17.21",
     "pinia": "^2.1.6",

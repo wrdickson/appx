@@ -1,5 +1,5 @@
 <template>
-  <div v-if="optionsLoaded && authCompleted" class="main">
+  <div v-if="optionsLoaded && authCompleted && dataLoaded" class="main">
     <el-container>
       <el-header>
         <el-menu
@@ -38,15 +38,21 @@
   import { RouterView } from 'vue-router'
   import localeSwitch from '@/components/localeSwitch.vue'
   import _ from 'lodash'
-  import { computed, ref, onMounted } from 'vue'
-  //  modules/auth
+  import { computed, ref } from 'vue'
+  //  auth
   import { authStore } from '@/stores/authStore.js'
   import { authData } from '@/data/authData.js'
-  //  modules/options
+  //  options
   import { optionsStore } from '@/stores/optionsStore.js'
   import { optionsData } from '@/data/optionsData.js'
-  //  modules/locale
+  //  locale
   import { localeStore } from '@/stores/localeStore.js'
+  //  root spaces
+  import { rootSpacesData } from '@/data/rootSpaces.js'
+  import { rootSpacesStore } from '@/stores/rootSpacesStore.js'
+  //  space types
+  import { spaceTypesData } from '@/data/spaceTypes.js'
+  import { spaceTypeStore } from '@/stores/spaceTypeStore.js'
 
   //  PROPS
   const props = defineProps(['autoloadOptions'])
@@ -54,6 +60,18 @@
   //  REFS
   const authCompleted = ref(false)
   const optionsLoaded = ref(true)
+
+  const rootSpacesLoaded = ref(false)
+  const spaceTypesLoaded = ref(false)
+
+  //  COMPUTED
+  const dataLoaded = computed( () => {
+    if( rootSpacesLoaded && spaceTypesLoaded ) {
+      return true
+    }  else {
+      return false
+    }
+  })
 
   //  HANDLE DARK/LIGHT TOGGLE
   //  this is the magic that makes the dark/light toggle possible
@@ -73,15 +91,18 @@
         authStore().setToken( token )
       }
       authCompleted.value = true
+      loadInitialData()
     }).catch( err => {
       authStore().setAccountToGuest()
       //router.push('/Login')
       authCompleted.value = true
+      loadInitialData()
     })
   } else {
     authStore().setAccountToGuest()
     //router.push('/Login')
     authCompleted.value = true
+    loadInitialData()
   }
   const account = computed( () => {
     return authStore().account
@@ -97,6 +118,18 @@
   localeStore().setComponentLocale(defaultLocale)
 
   //  LOAD INITIAL DATA
+  const loadInitialData = () => {
+    //  rootSpaces
+    rootSpacesData.getRootSpaces( ).then( response => {
+      rootSpacesStore().setRootSpaces( response.data.root_spaces_children_parents )
+      rootSpacesLoaded.value = true
+    })
+    //  spaceTypes
+    spaceTypesData.getSpaceTypes().then( response => {
+      spaceTypeStore().setSpaceTypes( response.data.space_types)
+      spaceTypesLoaded.value = true
+    })
+  }
   
 
 </script>
