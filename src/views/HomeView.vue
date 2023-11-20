@@ -19,7 +19,7 @@
   import { useI18n } from 'vue-i18n'
   import { localeStore } from '@/modules/i18n/store.js'
   import { computed, ref } from 'vue'
-  import 'dayjs/locale/es'
+  //import 'dayjs/locale/es'
 
   const lStore = localeStore()
   const { t } = useI18n()

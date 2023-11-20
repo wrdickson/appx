@@ -23,16 +23,19 @@ $f3->set('AUTOLOAD', 'controller/');
 
 //  ITERATE THEM ROUTES . . .
 
+//  DEBUG
 $f3->route('GET /test', 'Test_Controller->index');
-
 $f3->route('GET /test/do-something', 'Test_Controller->do_something');
 
 //  AUTH
 $f3->route('POST /login', 'Auth_Controller->login');
 $f3->route('POST /authorize-token', 'Auth_Controller->authorize_token');
 
-//  Options
+//  OPTIONS
 $f3->route('GET /autoload-options', 'Options_Controller->get_autoload_options');
+
+//  SPACE_TYPES
+
 
 //  start the router
 $f3->run();
