@@ -16,6 +16,11 @@ const router = createRouter({
       name: 'create-reservation',
       component: () => import('@/views/CreateReservation/CreateReservation.vue')
     },
+    {
+      path: '/res-view',
+      name: 'res-view',
+      component: () => import('@/views/ResView/ResView.vue')
+    },
     //  DEBUG
     {
       path: '/test',

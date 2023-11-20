@@ -13,6 +13,35 @@ import { messages } from '@/i18n/messages.js'
 
 import App from '@/App.vue'
 
+//  FONT AWESOME ICONS
+/* import fontawesome core */
+import { library } from '@fortawesome/fontawesome-svg-core'
+/* import font awesome icon component */
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+/* treeshake specific icons */
+import {
+  faArrowDown,
+  faBars,
+  faCircleArrowRight,
+  faChevronRight,
+  faChevronDown,
+  faCircleArrowDown,
+  faWindowClose
+} from '@fortawesome/free-solid-svg-icons'
+
+/* add icons to the library */
+library.add(
+  faArrowDown,
+  faBars,
+  faChevronRight,
+  faChevronDown,
+  faCircleArrowRight,
+  faCircleArrowDown,
+  faWindowClose
+)
+
+
+
 //  router
 import router from '@/router'
 import { routes } from '@/router/routes.js'
@@ -43,6 +72,7 @@ optionsData.getAutoloadOptions().then( response => {
   
   //  INSTANTIATE APP AND PASS OPTIONS PROPS
   const app = createApp(App, optionsObj)
+  app.component('font-awesome-icon', FontAwesomeIcon)
   app.use(useI18n)
   app.use(createPinia())
   app.use(router)

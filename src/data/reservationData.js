@@ -79,11 +79,11 @@ export const reservationData = {
     return promise
   },
 
-  getReservationsByRange ( startDate, endDate, token ) {
+  getReservationsByRange ( startDate, endDate ) {
     const request = axios({
       method: 'post',
       headers: {
-        'Jwt': token
+        'jwt': authStore().token
       },
       data: {
         startDate: startDate,

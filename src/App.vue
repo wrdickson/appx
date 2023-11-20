@@ -9,6 +9,7 @@
         >
           <el-menu-item index="/">Home</el-menu-item>
           <el-menu-item index="/create-reservation">Create Reservation</el-menu-item>
+          <el-menu-item index="/res-view">ResView</el-menu-item>
           <el-sub-menu index="2">
             <template #title>Debug</template>
             <el-menu-item index="/test">Test</el-menu-item>

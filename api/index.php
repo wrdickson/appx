@@ -49,6 +49,7 @@ $f3->route('GET /autoload-options', 'Options_Controller->get_autoload_options');
 
 //  RESERVATIONS
 $f3->route('POST /reservations/', 'Reservation_Controller->create_reservation');
+$f3->route('POST /reservations/range', 'Reservation_Controller->get_reservations_by_range');
 $f3->route('POST /reservations/availability', 'Reservation_Controller->check_availability_by_dates');
 
 //  ROOT SPACES
