@@ -14,7 +14,7 @@
 
 <script>
 
-import { localeStore } from '@/modules/i18n/store.js'
+import { localeStore } from '@/stores/localeStore.js'
 
 export default {
   name: 'LocaleSwitch',

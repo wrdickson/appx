@@ -17,7 +17,7 @@
 
 <script setup>
   import { useI18n } from 'vue-i18n'
-  import { localeStore } from '@/modules/i18n/store.js'
+  import { localeStore } from '@/stores/localeStore.js'
   import { computed, ref } from 'vue'
   //import 'dayjs/locale/es'
 

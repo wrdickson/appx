@@ -8,9 +8,14 @@
           :router="true"
         >
           <el-menu-item index="/">Home</el-menu-item>
-          <el-menu-item index="/test">Test</el-menu-item>
-          <el-menu-item index="/ref-reactive">Ref-Reactive</el-menu-item>
-          <el-menu-item index="props-play">Props</el-menu-item>
+          <el-menu-item index="/create-reservation">Create Reservation</el-menu-item>
+          <el-sub-menu index="2">
+            <template #title>Debug</template>
+            <el-menu-item index="/test">Test</el-menu-item>
+            <el-menu-item index="/ref-reactive">Ref-Reactive</el-menu-item>
+            <el-menu-item index="props-play">Props</el-menu-item>
+          </el-sub-menu>
+
           <div class="flex-grow"></div>
           <el-menu-item v-if="account.id < 1" index="/login">Login</el-menu-item>
           <el-menu-item v-if="account.id > 0" index="/logoff">{{account.username}} - Logoff</el-menu-item>
@@ -31,17 +36,17 @@
 
 <script setup>
   import { RouterView } from 'vue-router'
-  import localeSwitch from '@/modules/i18n/localeSwitch.vue'
+  import localeSwitch from '@/components/localeSwitch.vue'
   import _ from 'lodash'
   import { computed, ref, onMounted } from 'vue'
   //  modules/auth
-  import { authStore } from '@/modules/auth/store.js'
-  import { authData } from '@/modules/auth/data.js'
+  import { authStore } from '@/stores/authStore.js'
+  import { authData } from '@/data/authData.js'
   //  modules/options
-  import { optionsStore } from '@/modules/options/store.js'
-  import { optionsData } from '@/modules/options/data.js'
+  import { optionsStore } from '@/stores/optionsStore.js'
+  import { optionsData } from '@/data/optionsData.js'
   //  modules/locale
-  import { localeStore } from '@/modules/i18n/store.js'
+  import { localeStore } from '@/stores/localeStore.js'
 
   //  PROPS
   const props = defineProps(['autoloadOptions'])
@@ -91,6 +96,9 @@
   const defaultLocale = optionLocale.option_value
   localeStore().setComponentLocale(defaultLocale)
 
+  //  LOAD INITIAL DATA
+  
+
 </script>
 
 <style>
@@ -109,5 +117,8 @@
   }
   .el-main {
     padding-top: 0px !important;
+  }
+  .el-sub-menu {
+    height: 40px !important;
   }
 </style>

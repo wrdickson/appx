@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { authStore } from './store.js'
+import { authStore } from '@/stores/authStore.js'
 export default {
   name: 'Logoff',
   computed: {

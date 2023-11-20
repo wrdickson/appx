@@ -9,19 +9,17 @@ import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import 'element-plus/theme-chalk/display.css'
 import _ from 'lodash'
-import { messages } from '@/modules/i18n/messages.js'
+import { messages } from '@/i18n/messages.js'
 
 import App from '@/App.vue'
 
 //  router
-import router from './router'
-
-//  MODULE LOADER: AUTH
-import { authRoutes } from '@/modules/auth/routes.js'
-_.each(authRoutes, route => { router.addRoute(route) })
+import router from '@/router'
+import { routes } from '@/router/routes.js'
+_.each(routes, route => { router.addRoute(route) })
 
 //  MODULR LOADER: OPTIONS
-import { optionsData } from '@/modules/options/data.js'
+import { optionsData } from '@/data/optionsData.js'
 
 //  GET AND HANDLE OPTIONS DATA
 optionsData.getAutoloadOptions().then( response => {

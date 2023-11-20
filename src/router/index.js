@@ -10,19 +10,24 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/create-reservation',
+      name: 'create-reservation',
+      component: () => import('@/views/CreateReservation/CreateReservation.vue')
+    },
+    {
       path: '/test',
       name: 'test',
-      component: () => import('@/views/Test.vue')
+      component: () => import('@/views/Debug/Test.vue')
     },
     {
       path: '/ref-reactive',
       name: 'refreactive',
-      component: () => import('@/views/RefReactive.vue')
+      component: () => import('@/views/Debug/RefReactive.vue')
     },
     {
       path: '/props-play',
       name: 'props-play',
-      component: () => import('@/views/PropsPlay.vue')
+      component: () => import('@/views/Debug/PropsPlay.vue')
     }
   ]
 })
