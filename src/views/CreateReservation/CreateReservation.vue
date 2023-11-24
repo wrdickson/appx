@@ -1,26 +1,10 @@
 <template>
   <el-row>
     <el-col>
-      <h1>{{ $t('message.createReservation') }}</h1>
-      <el-button type="primary" size="small" @click="resetForm">Reset Form</el-button>
-      <!--
-      <div>CreateReservation State</div>
-      <div>selectedPeople: {{ selectedPeople }}</div>
-      <div>selectedBeds: {{ selectedBeds }}</div>
-      <div>startDate: {{ startDate }}</div>
-      <div>endDate: {{ endDate }}</div>
-
-      <div>selectedCustomer: {{ selectedCustomer }}</div>
-      -->
-      <div>spaceId: {{ selectedSpaceId }}</div>
-      <div>spaceTypePref: {{spaceTypePref}}</div>
-      <div>isAssigned: {{isAssigned}}</div>
-      
-      <hr/>
       <div>
         <span style="display: flex;">
           <span v-if="selectedCustomer">{{ $t('message.customer') }}:&nbsp<b>{{ selectedCustomer.first_name }}&nbsp{{selectedCustomer.last_name}}</b></span>
-        
+        <!--
           <el-button 
             v-if="selectedCustomer"
             type="warning"
@@ -30,6 +14,8 @@
             >
               {{ $t('message.reset') }}
           </el-button>
+          -->
+          <el-button style="margin-left: auto" type="primary" plain size="small" @click="resetForm">Reset Form</el-button>
         </span>
       </div>
       <div>
@@ -37,12 +23,14 @@
           <el-form size="small">
             <el-form-item :label="labelCustomer">
               <el-button
+                plain
                 size="small"
                 type="primary"
                 @click="showSearchCustomers = true; showCreateCustomer = false">
                 {{ $t('message.search') }}
               </el-button>
               <el-button
+                plain
                 size="small"
                 type="primary"
                 @click="showCreateCustomer = true; showSearchCustomers = false">

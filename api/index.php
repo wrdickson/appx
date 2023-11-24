@@ -19,6 +19,7 @@ require 'lib/Folio.php';
 //  instantiate $f3 
 $f3 = \Base::instance();
 
+//  get a db connection
 $db = new DB\SQL(
   'mysql:host=' . DB_HOST. ';port=3306;dbname=' . DB_NAME,
   DB_USER,
@@ -27,10 +28,10 @@ $db = new DB\SQL(
 
 // assign the db connection to $f3 object
 $f3->set('DB', $db);
-// autoload the controllers and models into the $f3 object
+// autoload the controllers into the $f3 object
 $f3->set('AUTOLOAD', 'controller/');
 
-//  ITERATE THEM ROUTES . . .
+//  BOILERPLATE DEM ROUTES . . .
 
 //  DEBUG
 $f3->route('GET /test', 'Test_Controller->index');
@@ -51,16 +52,14 @@ $f3->route('GET /autoload-options', 'Options_Controller->get_autoload_options');
 $f3->route('POST /reservations/', 'Reservation_Controller->create_reservation');
 $f3->route('POST /reservations/range', 'Reservation_Controller->get_reservations_by_range');
 $f3->route('POST /reservations/availability', 'Reservation_Controller->check_availability_by_dates');
+$f3->route('POST /reservations/range-ignore-res', 'Reservation_Controller->check_availability_by_dates_ignore_res');
+$f3->route('POST /reservations/update1/', 'Reservation_Controller->update_reservation_1');
 
 //  ROOT SPACES
 $f3->route('POST /root-spaces', 'Root_Space_Controller->get_root_spaces');
 
 //  SPACE TYPES
 $f3->route('POST /space-types', 'Space_Type_Controller->get_space_types');
-
-
-//  SPACE_TYPES
-
 
 //  start the router
 $f3->run();

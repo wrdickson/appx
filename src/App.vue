@@ -7,9 +7,16 @@
           :ellipsis="false"
           :router="true"
         >
+
           <el-menu-item index="/">Home</el-menu-item>
-          <el-menu-item index="/create-reservation">Create Reservation</el-menu-item>
-          <el-menu-item index="/res-view">ResView</el-menu-item>
+          <el-sub-menu index="1">
+            <template #title>Reservations</template>
+            <el-menu-item index="/create-reservation">Create Reservation</el-menu-item>
+            <el-menu-item index="/res-view">ResView</el-menu-item>
+            <el-menu-item index="/workbench">Workbench</el-menu-item>
+          </el-sub-menu>
+          
+
           <el-sub-menu index="2">
             <template #title>Debug</template>
             <el-menu-item index="/test">Test</el-menu-item>
@@ -82,6 +89,20 @@
   //  we add class="dark" to index.html to make this work
   const toggleDark = useToggle(isDark)
 
+  //  LOAD INITIAL DATA
+  const loadInitialData = () => {
+    //  rootSpaces
+    rootSpacesData.getRootSpaces( ).then( response => {
+      rootSpacesStore().setRootSpaces( response.data.root_spaces_children_parents )
+      rootSpacesLoaded.value = true
+    })
+    //  spaceTypes
+    spaceTypesData.getSpaceTypes().then( response => {
+      spaceTypeStore().setSpaceTypes( response.data.space_types)
+      spaceTypesLoaded.value = true
+    })
+  }
+
   //  HANDLE ACCOUNT (USER)   
   const localstorageAccount = JSON.parse(localStorage.getItem('account'))
   const token = localStorage.getItem('token')
@@ -97,13 +118,13 @@
       authStore().setAccountToGuest()
       //router.push('/Login')
       authCompleted.value = true
-      loadInitialData()
+      //loadInitialData()
     })
   } else {
     authStore().setAccountToGuest()
     //router.push('/Login')
     authCompleted.value = true
-    loadInitialData()
+    //loadInitialData()
   }
   const account = computed( () => {
     return authStore().account
@@ -117,21 +138,6 @@
   })
   const defaultLocale = optionLocale.option_value
   localeStore().setComponentLocale(defaultLocale)
-
-  //  LOAD INITIAL DATA
-  const loadInitialData = () => {
-    //  rootSpaces
-    rootSpacesData.getRootSpaces( ).then( response => {
-      rootSpacesStore().setRootSpaces( response.data.root_spaces_children_parents )
-      rootSpacesLoaded.value = true
-    })
-    //  spaceTypes
-    spaceTypesData.getSpaceTypes().then( response => {
-      spaceTypeStore().setSpaceTypes( response.data.space_types)
-      spaceTypesLoaded.value = true
-    })
-  }
-  
 
 </script>
 

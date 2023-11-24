@@ -1,19 +1,18 @@
 <template v-if="rootSpaces">
-  <div>
+  <div style="padding-left: 8px;">
     <span>
       <el-button-group>
-        <el-button type="warning" @click="viewBack7">-7</el-button>
-        <el-button type="warning" @click="viewBack1">-1</el-button>
+        <el-button type="primary" plain @click="viewBack7">-7</el-button>
+        <el-button type="primary" plain  @click="viewBack1">-1</el-button>
       </el-button-group>
       <singleDatePicker
         :overrideDate="overRideSingleDatePicker"
         @singleDatePicker:dateSelected="singleDateSelected"
       />
       <el-button-group>
-        <el-button type="warning" @click="viewForward1">+1</el-button>
-        <el-button type="warning" @click="viewForward7">+7</el-button>
+        <el-button type="primary" plain @click="viewForward1">+1</el-button>
+        <el-button type="primary" plain @click="viewForward7">+7</el-button>
       </el-button-group>&nbsp
-      <el-button type="success" @click="showCreateReservationFtn">{{ $t('message.createReservation') }}</el-button>
     </span>
     <ResViewTable
       v-if = "rootSpaces"
@@ -31,8 +30,8 @@
 </template>
 
 <script>
-import singleDatePicker from './singleDatePicker.vue'
-import ResViewTable from './resViewTable.vue'
+import singleDatePicker from '@/views/ResView/singleDatePicker.vue'
+import ResViewTable from '@/views/ResView/resViewTable.vue'
 import dayjs from 'dayjs'
 import 'dayjs/locale/es'
 import isSameOrBefore from 'dayjs'
@@ -53,10 +52,12 @@ export default {
       return { handleRequestError }
   },
   name: 'ResView',
+  props: ['reloadTrigger'],
   components: {
     singleDatePicker,
     ResViewTable
   },
+  emits: [ 'reservation-selected' ],
   data () {
     return {
       leftPaneSize: 30,
@@ -402,11 +403,8 @@ export default {
       const reactiveSelectedReservation = _.find(this.reservations, function(o){
         return o.id == resId
       })
-      console.log(_.cloneDeep(reactiveSelectedReservation))
       this.selectedReservation = {...reactiveSelectedReservation}
-      console.log(this.selectedReservation)
-      //this.showCreateReservation = false
-      //this.showReservationView = true
+      this.$emit('reservation-selected', _.cloneDeep(reactiveSelectedReservation) )
     },
     rowClassName ( obj) {
     },
@@ -450,6 +448,7 @@ export default {
       })
       console.log('selRES @ res', _.cloneDeep(reactiveSelectedReservation))
       this.selectedReservation = {...reactiveSelectedReservation}
+      this.$emit('reservation-selected', _.cloneDeep(reactiveSelectedReservation) )
       this.showCreateReservation = false
       this.showReservationView = true
     },
@@ -487,13 +486,14 @@ export default {
     window.addEventListener('resize', (event) => {
       this.windowWidth = window.innerWidth
       this.windowHeight = window.innerHeight
-    }, true);
+    }, true)
 
     //  SUPER IMPORTANT that we are referencing the hide/show iteration of
     //  space records if they exist.  these hold the show/hide children in
     //  current state, so the user has a continuous experience of show/hide children
     //  do we have a showHideRootSpaceCopy in store?
-    //  get space records
+    //  ALSO NOTE: this is jankey in that it mutates the store value . . .  
+    //  BUT, we are soooo tightly coupled here that it's probably okay
     if( resViewStore().showHideRootSpaceCopy ) {
       this.rootSpaces = resViewStore().showHideRootSpaceCopy
     } else { 
@@ -501,6 +501,12 @@ export default {
     }
     // and . . .   LOAD THE RESERVATIONS
     this.getReservations()
+  },
+  watch: {
+    reloadTrigger ( newVal ) {
+      this.getReservations()
+    }
+
   }
 }
 </script>

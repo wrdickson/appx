@@ -1,7 +1,7 @@
 <template>
     <div class="unassignedBlock">
     <el-dropdown trigger="click">
-      <el-button type="danger">
+      <el-button type="danger" plain size="small">
         {{resQuantity}}&nbsp<font-awesome-icon icon="fa-solid fa-arrow-down" />
       </el-button>
 

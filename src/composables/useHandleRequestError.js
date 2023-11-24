@@ -1,16 +1,16 @@
 import { ElNotification } from 'element-plus'
 import  router  from '/src/router/index.js'
-import { authStore } from '/src/stores/authStore.js'
+import { authStore } from '@/stores/authStore.js'
 
 export default () => {
 
   const directToHome = () => {
-    accountStore().setAccountToGuest()
+    authStore().setAccountToGuest()
     router.push( { path: '/Home' } )
   }
 
   const directToLogin = () => {
-    accountStore().setAccountToGuest()
+    authStore().setAccountToGuest()
     router.push( { path: '/Login' } )
   }
 
@@ -22,7 +22,7 @@ export default () => {
             case 400:  //  bad request
               ElNotification({
                 title: 'Error 400 - Bad Request',
-                duration: 0,
+                duration: 2000,
                 message: 'The request was malformed.  Request was not processed',
                 type: 'error'
               })
@@ -30,7 +30,7 @@ export default () => {
             case 401:  //  unauthorized
               ElNotification({
                 title: 'Error 401 - Unauthorized',
-                duration: 4500,
+                duration: 2000,
                 message: 'Authorization failed.  Request was not processed.',
                 type: 'error',
                 onClose: directToLogin
@@ -48,14 +48,14 @@ export default () => {
             case 404:  //  not found
               ElNotification({
                 title: 'Error 404 - Not found',
-                duration: 4500,
+                duration: 2000,
                 message: 'The location of this this request was not found',
                 type: 'error'
               })
             case 500:  //  server error
               ElNotification({
                 title: 'Server Error',
-                duration: 4500,
+                duration: 2000,
                 message: 'There was an error on the server.  Request was not processed',
                 type: 'error'
               })
@@ -63,7 +63,7 @@ export default () => {
             default:
               ElNotification({
                 title: 'Error',
-                duration: 4500,
+                duration: 2000,
                 message: 'There was an error.  Request was not processed',
                 type: 'error'
               })

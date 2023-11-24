@@ -28,7 +28,7 @@ class Customer_Controller {
     print json_encode($response);
   }
 
-  public function search_customers ( $f3) {
+  public function search_customers ( $f3 ) {
     $perms = [ 'permission' => 1, 'role' => 'search_customers' ];
     //  the request should have 'jwt' property in header with user's token
     //  this throws an error if the token doesn't work OR user doesn't have permission

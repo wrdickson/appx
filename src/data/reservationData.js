@@ -17,11 +17,11 @@ export const reservationData = {
     return promise
   },
 
-  checkAvailabilityByDatesIgnoreRes: (resId, start, end, token) => {
+  checkAvailabilityByDatesIgnoreRes: (resId, start, end) => {
     const promise = axios({
       method: 'post',
       headers: {
-        'Jwt': token
+        'Jwt': authStore().token
       },
       data: {
         'res_id': resId,
@@ -94,11 +94,11 @@ export const reservationData = {
     return request
   },
 
-  modifyReservation1 ( resObj, token ) {
+  modifyReservation1 ( resObj ) {
     const request = axios({
       method: 'post',
       headers: {
-        'Jwt': token
+        'Jwt': authStore().token
       },
       data: {
         res_obj: resObj

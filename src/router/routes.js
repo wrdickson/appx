@@ -8,6 +8,10 @@ export const routes = [
     path: '/logoff',
     component: () => import('@/views/Logoff.vue')
   },
+  {
+    path: '/workbench',
+    component: () => import('@/views/workbench/workbench.vue')
+  }
 
   //  
 

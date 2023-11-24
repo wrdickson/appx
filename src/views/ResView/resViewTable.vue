@@ -2,6 +2,7 @@
   <el-table
     ref="resViewTable"
     :data="tableData"
+    border
     :row-style="rowStyle"
     :height="tableHeight"
     row-class-name="resview-row"
