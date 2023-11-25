@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="lib/bootstrap-5.2.3.css" rel="stylesheet">
-    <title>install_uno.php</title>
+    <title>installer</title>
   </head>
   <body>
     <?php
@@ -39,7 +39,6 @@
             <input class="form-control form-control-sm" type="text" id="admin_user_password_2" name="admin_user_password_2">
         </div>
         <div class="col col-6">
-          
             <label class="form-label" for="jwt_key">Token salt:</label>
             <input class="form-control form-control-sm" type="text" id="jwt_key" name="jwt_key">
             <label class="form-label" for="default_locale">Locale</label>
@@ -71,7 +70,14 @@
               echo "</select>";
               $tz_arr =  DateTimeZone::listIdentifiers( DateTimeZone::ALL );
             ?>
+            <label class="form-label" for="house_account_name">House account name:</label>
+            <input class="form-control form-control-sm" type="text" id="house_account_name" name="house_account_name">
+
+            <label class="form-label" for="unassigned_space_name">Unassigned space name:</label>
+            <input class="form-control form-control-sm" type="text" id="unassigned_space_name" name="unassigned_space_name">
+
             <input class="btn btn-primary mt-2" type="submit" value="Install"/>
+
           
           </form>
         </div>

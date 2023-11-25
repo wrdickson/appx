@@ -40,9 +40,14 @@ class Reservation_Controller {
     $params = json_decode($f3->get('BODY'), true);
     //  TODO . . . recheck that it's available
   
+    /*
+    * DEBUG DEBUG DEBUG
+    */
+    $params['space_type_pref'] = 4;
+
     $response['create'] = Reservations::create_reservation($account->id, $params['customer']['id'], $params['checkin'], $params['checkout'], $params['space_id'], $params['beds'], $params['people'], $params['is_assigned'], $params['space_type_pref'] );
     
-    if( $response['create']['new_res_id'] ) {
+    if( $response && $response['create']['new_res_id'] ) {
       $response['nri'] = $response['create']['new_res_id'];
       $iRes = new Reservation($response['create']['new_res_id']);
       $response['history_added'] = $iRes->add_history("Created", $account->id, $account->username);
@@ -184,6 +189,10 @@ class Reservation_Controller {
      * SPACE_TYPE_PREF
      */
     if( $space_type_pref != $iRes->get_space_type_pref() ) {
+      /*
+      *  OVERRIDE TEMP DEBUG
+      */
+      $space_type_pref = 4;
       $response['set_space_type_pref'] = $iRes->set_space_type_pref( $space_type_pref );
     }
   
