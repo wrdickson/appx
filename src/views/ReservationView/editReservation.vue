@@ -119,8 +119,9 @@
 <script>
 import { reservationData } from '@/data/reservationData.js'
 import { localeStore } from '/src/stores/localeStore.js'
-import { rootSpacesStore } from '/src/stores/rootSpacesStore.js'
-import { spaceTypeStore } from '/src/stores/spaceTypeStore.js'
+import { rootSpacesStore } from '@/stores/rootSpacesStore.js'
+import { spaceTypeStore } from '@/stores/spaceTypeStore.js'
+import { optionsStore } from '@/stores/optionsStore.js'
 import SearchCustomers from '@/views/ReservationView/searchCustomers.vue'
 import CreateCustomer from '@/views/ReservationView/createCustomer.vue'
 import dayjs from 'dayjs'
@@ -246,6 +247,12 @@ export default {
     },
     typeLabel () {
       return this.$t('message.type')
+    },
+    unassignedRootSpace () {
+      return optionsStore().autoloadOptions.unassigned_root_space
+    },
+    unassignedSpaceType () {
+      return optionsStore().autoloadOptions.unassinged_space_type
     }
 
   },
@@ -333,7 +340,7 @@ export default {
       
       let modSpaceSelected = null
       if(!this.cIsAssigned){
-        modSpaceSelected = 0
+        modSpaceSelected = parseInt(this.unassignedRootSpace)
       } else {
         modSpaceSelected = this.selectedSpace
       }
@@ -341,7 +348,7 @@ export default {
       //  if 
       let modSpaceTypePref = null
       if(modSpaceSelected){
-        modSpaceTypePref = 0
+        modSpaceTypePref = parseInt(this.unassignedSpaceType)
       } else {
         modSpaceTypePref = this.cSpaceTypePref
       }

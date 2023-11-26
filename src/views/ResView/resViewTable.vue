@@ -32,9 +32,14 @@
       <el-table-column :prop=day.dayString :label=day.dayLabel width="90">
       <template #default="scope">
         <div style="display: flex; align-items: center;">
+          <!--
+            This is where we make sure NOT to present
+            res blocks IF it is an UNASSIGNED reservation
+          -->
           <resBlock
             @resBlockClick="resBlockClick"
             v-if="scope.row[day.dayString + 'resid']"
+
             :resId="scope.row[day.dayString + 'resid']"
             :start="scope.row[day.dayString + 'start']"
             :end="scope.row[day.dayString + 'end']"

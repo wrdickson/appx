@@ -31,6 +31,7 @@ class Installer {
   private $house_account_id;
   private $house_account_folio_id;
   private $unassigned_space_type_id;
+  private $unassigned_root_space_id;
 
   public function __construct ($db_user, $db_pass, $db_name, $db_host, $admin_user, $admin_user_email, $admin_user_password_1, $admin_user_password_2, $cur_code, $jwt_key, $site_name, $default_locale, $house_account_name, $time_zone, $unassigned_space_name) {
 
@@ -149,11 +150,13 @@ class Installer {
     $this->space_types_drop();
     $this->space_types_create();
     $this->space_types_insert_unassigned();
+    $this->space_types_insert_unassigned_option();
     //  root spaces
     //  must execute AFTER space_types creation so we have access to the unassigned space type
     $this->root_spaces_drop();
     $this->root_spaces_create();
     $this->root_spaces_insert_unassigned();
+    $this->root_spaces_insert_unassigned_option();
     //  folios
     $this->folios_drop();
     $this->folios_create();
@@ -242,7 +245,7 @@ class Installer {
   }
 
   private function customers_insert_folio_option () {
-    $stmt = $this->pdo->prepare("INSERT INTO options ( option_name, option_value, autoload ) VALUES ( 'house_account', :ha, 1 )");
+    $stmt = $this->pdo->prepare("INSERT INTO options ( option_name, option_value, autoload ) VALUES ( 'house_account_customer', :ha, 1 )");
     $stmt->bindParam(':ha', $this->house_account_id);
     if( $stmt->execute() ) {
       echo"<p>House account option added . . .</p>";
@@ -454,7 +457,19 @@ class Installer {
     $stmt->bindParam(':st', $this->unassigned_space_type_id);
     $stmt->bindParam(':na', $this->unassigned_space_name);
     if( $stmt->execute() ){
+      $this->unassigned_root_space_id = $this->pdo->lastInsertId();
       echo "<p>Unassigned root space inserted . . .</p>";
+      echo "<p>Id: " . $this->unassigned_root_space_id . " . . .</p>";
+    }
+  }
+
+  private function root_spaces_insert_unassigned_option () {
+    $stmt = $this->pdo->prepare("INSERT INTO options ( option_name, option_value, autoload ) VALUES ( :name, :value, 1 )");
+    $nnn = 'unassigned_root_space';
+    $stmt->bindParam(':name', $nnn);
+    $stmt->bindParam(':value', $this->unassigned_root_space_id);
+    if( $stmt->execute() ) {
+      echo"<p>Unassigned root space inserted into options . . .</p>";
     }
   }
 
@@ -464,6 +479,7 @@ class Installer {
       `title` varchar(45) NOT NULL,
       `is_active` tinyint(4) NOT NULL,
       `display_order` int(11) NOT NULL,
+      `is_unassigned` tinyint(4) NOT NULL,
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
     $stmt = $this->pdo->prepare($create_space_types_sql);
@@ -481,13 +497,23 @@ class Installer {
   }
 
   private function space_types_insert_unassigned () {
-    $sql = "INSERT INTO `space_types` ( title, is_active, display_order ) VALUES ( :t, 1, 100000)";
+    $sql = "INSERT INTO `space_types` ( title, is_active, display_order, is_unassigned ) VALUES ( :t, 1, 100000, 1)";
     $stmt = $this->pdo->prepare($sql);
     $stmt->bindParam(':t', $this->unassigned_space_name);
     if( $stmt->execute() ) {
       $this->unassigned_space_type_id = $this->pdo->lastInsertId();
       echo "<p>Unassigned space_type inserted . . .</p>";
       echo "<p>Unassigned space type id: " . $this->unassigned_space_type_id . " . . .</p>";
+    }
+  }
+
+  private function space_types_insert_unassigned_option () {
+    $stmt = $this->pdo->prepare("INSERT INTO options ( option_name, option_value, autoload ) VALUES ( :name, :value, 1 )");
+    $nnn = 'unassigned_space_type';
+    $stmt->bindParam(':name', $nnn);
+    $stmt->bindParam(':value', $this->unassigned_space_type_id);
+    if( $stmt->execute() ) {
+      echo"<p>Unassigned root space inserted into options . . .</p>";
     }
   }
 
@@ -601,12 +627,12 @@ class Installer {
 
     //  space_types
     $sql = "
-    INSERT INTO `space_types` (`id`, `title`, `is_active`, `display_order`) VALUES
-    (2,	'Dorm Bed',	1,	10),
-    (3,	'Room',	1,	20),
-    (4,	'Cabin',	1,	30),
-    (5,	'Camping',	1,	40),
-    (6,	'House',	1,	50);
+    INSERT INTO `space_types` (`id`, `title`, `is_active`, `display_order`, `is_unassigned`) VALUES
+    (2,	'Dorm Bed',	1,	10, 0),
+    (3,	'Room',	1,	20, 0),
+    (4,	'Cabin',	1,	30, 0),
+    (5,	'Camping',	1,	40, 0),
+    (6,	'House',	1,	50, 0);
     ";
     $stmt = $this->pdo->prepare($sql);
     if( $stmt->execute() ) {

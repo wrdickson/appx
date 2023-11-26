@@ -139,9 +139,10 @@ export default {
             //get the reservation
             return o.id == iReservation.space_id
           })
-          //  if there is no iRecord, it means the reservation is unassigned
-          //  ie spaceId is 0, so we do not proceed with this reservation (yet)
-          if(iRecord){ 
+          //  don't present if iReservation.is_assigned == 0 (ie is unassigned)
+          if(iRecord && iReservation.is_assigned){ 
+            console.log('iRecord HERE:', iRecord)
+            console.log('iRes HERE', iReservation)
             //  first present the reservation
 
             if( dayjs(iReservation.checkout).isAfter(dayjs(this.resViewEndDate)) ){
@@ -212,6 +213,7 @@ export default {
           //  if there is no iRecord, it means the reservation is unassigned
           //  ie spaceId is 0, so we do not proceed with this reservation (yet)
           if(iRecord && iRecord.children.length > 0){
+            console.log('iRecord at POINT 2', iRecord)
             _.forEach(iRecord.children, (childId) => {
               let qRecord = _.find(spaceRecords, (o) => {
                 return o.id == childId
@@ -284,8 +286,8 @@ export default {
           }
           //  NOW, we handle unassigned reservations
           if(iReservation.is_assigned == 0) {
-            //console.log('iReservation @ handle unassigned')
-            //console.table(iReservation)
+            console.log('iReservation @ handle unassigned')
+            console.table(iReservation)
             let iDate = dayjs(iReservation.checkin).format('YYYYMMDD')
             let sKey = 'D' + iDate + 'unassigned'
             let qRecord = _.find(spaceRecords, (o) => {
@@ -294,6 +296,7 @@ export default {
                 return o.isUnassigned == 1
             })
             if(qRecord) {
+              console.log('qRecord', qRecord)
               if(!qRecord[sKey]){
                 
               qRecord[sKey] = [{...iReservation}]

@@ -15,7 +15,6 @@
           <?php
           require('../api/vendor/autoload.php');
           require('./lib/Installer.php');
-          require('lib/init_sql.php');
           require('lib/Validate.php');
 
           use \Brick\Money\Money;

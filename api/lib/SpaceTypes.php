@@ -5,9 +5,8 @@ class SpaceTypes {
   public static function get_space_types () {
 
     $pdo = DataConnector::get_connection();
-    //todo validate user
   
-    $stmt = $pdo->prepare("SELECT * FROM space_types");
+    $stmt = $pdo->prepare("SELECT * FROM space_types WHERE is_unassigned = 0");
     $execute= $stmt->execute();
     $arr = array();
     while($obj = $stmt->fetch(PDO::FETCH_OBJ)){
@@ -18,8 +17,6 @@ class SpaceTypes {
         $iArr['display_order'] = $obj->display_order;
         array_push($arr, $iArr);
     };
-    //$response['execute'] = $execute;
-    //$response['space_types'] = $arr;
     return $arr;
   }
 
