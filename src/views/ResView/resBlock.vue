@@ -48,7 +48,7 @@ export default {
   float: right;
 }
 .resBlockCheckedIn {
-    background-color: #67C23A;
+    background-color: #92c07a;
     color: rgb(14, 14, 14);
     width: 100%;
     padding-right: 4px;
@@ -60,7 +60,7 @@ export default {
   }
 
   .resBlockCheckedOut {
-    background-color: rgb(211, 208, 34);
+    background-color: rgb(206, 204, 122);
     color: rgb(53, 53, 53);
     width: 100%;
     padding-right: 4px;

@@ -22,7 +22,7 @@ class SpaceTypes {
 
   public static function create_space_type ( $title, $is_active, $display_order ) {
     $pdo = DataConnector::get_connection();
-    $stmt = $pdo->prepare("INSERT INTO space_types ( title, is_active, display_order ) VALUES ( :t, :ia, :do )");
+    $stmt = $pdo->prepare("INSERT INTO space_types ( title, is_active, display_order, is_unassigned ) VALUES ( :t, :ia, :do, 0 )");
     $stmt->bindParam(':t', $title);
     $stmt->bindParam(':ia', $is_active);
     $stmt->bindParam(':do', $display_order);

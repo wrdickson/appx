@@ -66,7 +66,7 @@ class Installer {
     //  use Brick/Money to generate 
     //  currency_fraction_digits
     //  currency_numeric_code
-    //  $currency_name
+    //  currency_name
     $u1 = Money::of(1, $cur_code);
     $this->currency_code = $u1->getCurrency()->getCurrencyCode();
     $this->currency_fraction_digits = $u1->getCurrency()->getDefaultFractionDigits();

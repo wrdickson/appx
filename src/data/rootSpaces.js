@@ -3,11 +3,11 @@ import { authStore } from '@/stores/authStore.js'
 
 export const rootSpacesData = {
 
-  createRootSpace: ( token, beds, childOf, displayOrder, people, showChildren, spaceType, title, isActive ) => {
+  createRootSpace: ( beds, childOf, displayOrder, people, showChildren, spaceType, title, isActive ) => {
     const promise = axios({
       method: 'post',
       headers: {
-        'Jwt': token
+        'jwt': authStore().token
       },
       data: {
         beds: beds,
@@ -24,11 +24,11 @@ export const rootSpacesData = {
     return promise
   },
 
-  deleteRootSpace: ( token, rootSpaceId ) => {
+  deleteRootSpace: ( rootSpaceId ) => {
     const promise = axios({
       method: 'post',
       headers: {
-        Jwt: token
+        jwt: authStore().token
       },
       data: {
         root_space_id: rootSpaceId
@@ -49,14 +49,14 @@ export const rootSpacesData = {
     return request
   },
 
-  updateRootSpace( token, updateSpace ) {
+  updateRootSpace( updateSpace ) {
     //  childOf and showChildren are strings, convert to int
     updateSpace.isActive = parseInt(updateSpace.isActive)
     updateSpace.showChildren = parseInt(updateSpace.showChildren)
     const promise = axios({
       method: 'post',
       headers: {
-        'Jwt': token
+        'Jwt': authStore().token
       },
       dataType: 'json',
       data: {

@@ -299,8 +299,6 @@ public static function check_conflicts( $start, $end, $space_id ) {
       //  even of it remains the same
       $iRes->set_space_id($space_id);
     };
-    //  simulate a HUGE process 
-    sleep(5);
   }
 
 }

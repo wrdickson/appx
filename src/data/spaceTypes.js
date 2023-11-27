@@ -2,11 +2,11 @@ import axios from 'axios'
 import { authStore } from '@/stores/authStore.js'
 
 export const spaceTypesData = {
-  createSpaceType: ( token, obj ) => {
+  createSpaceType: ( obj ) => {
     const promise = axios({
       method: 'POST',
       headers: {
-        'Jwt': token
+        'jwt': authStore().token
       },
       data: obj,
       url: 'api/space-type-create'
@@ -23,22 +23,22 @@ export const spaceTypesData = {
     })
     return promise
   },
-  updateSpaceType: ( token, obj ) => {
+  updateSpaceType: ( obj ) => {
     const promise = axios({
       method: 'post',
       headers: {
-        'Jwt': token
+        'Jwt': authStore().token
       },
         data: {...obj},
       url: 'api/space-type-update/'
     })
     return promise
   },
-  deleteSpaceType: ( token, spaceTypeId ) => {
+  deleteSpaceType: ( spaceTypeId ) => {
     const promise = axios({
       method: 'post',
       headers: {
-        'Jwt': token
+        'jwt': authStore().token
       },
       data: {
         space_type_id: spaceTypeId

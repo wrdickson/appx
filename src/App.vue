@@ -9,6 +9,7 @@
         >
 
           <el-menu-item index="/">Home</el-menu-item>
+          <el-menu-item index="/dashboard">Dashboard</el-menu-item>
           <el-sub-menu index="1">
             <template #title>Reservations</template>
             <el-menu-item index="/create-reservation">Create Reservation</el-menu-item>

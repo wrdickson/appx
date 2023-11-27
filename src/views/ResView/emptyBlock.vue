@@ -20,14 +20,13 @@ export default {
 
 <style>
   .emptyBlock {
-    background-color: rgb(180, 166, 166);
-    color: rgb(180, 166, 166);
+    background-color: rgb(65, 65, 65);
+    color: rgb(65, 65, 65);
     width: 100%;
     padding-right: 4px;
     padding-left: 4px;
     margin-right: 0px;
     margin-left: 0px;
     border-radius: 0px;
-    border-right: 1px solid blue;
   }
 </style>

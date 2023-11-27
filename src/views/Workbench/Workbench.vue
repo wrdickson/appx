@@ -4,7 +4,8 @@
       <div >
         <el-tabs type="border-card">
           <el-tab-pane label="Create">
-            <CreateReservation/>
+            <CreateReservation
+            @create-reservation:reload-reservations="reloadReservations"/>
           </el-tab-pane>
           <el-tab-pane label="Reservation">
             <ReservationView
@@ -43,13 +44,11 @@
 
   //  METHODS
   const reloadReservations = () => {
-    console.log('reload on workbench')
     resViewReloadTrigger.value += 1
   }
 
   const reservationSelected = ( res ) => {
     selectedReservation.value = res
-    console.table(_.cloneDeep(selectedReservation.value))
   }
 
   //  ONMOUNTED

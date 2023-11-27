@@ -119,7 +119,7 @@
       return { handleRequestError }
     },
     name: 'CreateReservation',
-    emits: [],
+    emits: ['create-reservation:reload-reservations'],
     components: {
       DateRangePicker,
       RootSpacePicker,
@@ -230,6 +230,7 @@
               message: 'Reservation was created'
             })
             this.resetForm()
+            this.$emit('create-reservation:reload-reservations')
           }
         }).catch( error => {
           loading.close()
