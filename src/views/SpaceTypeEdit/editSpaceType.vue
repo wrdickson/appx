@@ -21,8 +21,8 @@
         <el-input v-model="eSpaceType.display_order"/>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="close">{{ i18nClose }}</el-button>
-        <el-button type="success" @click="updateSpaceType(spaceTypeRef)">{{ i18nUpdate }}</el-button>
+        <el-button type="primary" plain @click="close">{{ i18nClose }}</el-button>
+        <el-button type="success" plain @click="updateSpaceType(spaceTypeRef)">{{ i18nUpdate }}</el-button>
       </el-form-item>
     </el-form>
     <hr/>
@@ -31,7 +31,7 @@
       ?"
       @confirm="deleteSpaceType">
       <template #reference>
-        <el-button type="danger">Delete</el-button>
+        <el-button type="danger" plain>Delete</el-button>
       </template>
     </el-popconfirm>
   </div>

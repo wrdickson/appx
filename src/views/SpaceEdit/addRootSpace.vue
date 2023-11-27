@@ -39,7 +39,7 @@
       </el-select>
     </el-form-item>
     <el-form-item>
-      <el-button v-if="formDataComplete" @click="createSpace">Create</el-button>
+      <el-button v-if="formDataComplete" plain @click="createSpace">Create</el-button>
     </el-form-item>
   </el-form>
 </template>

@@ -6,7 +6,7 @@
   </el-row>
   <el-row>
     <el-col :xs="24">
-      <el-button type="primary" @click="displayCreateSpaceType = true, selectedSpaceType = null">{{ i18nCreate }} {{ i18nSpaceType }}</el-button>
+      <el-button type="primary" plain @click="displayCreateSpaceType = true, selectedSpaceType = null">{{ i18nCreate }} {{ i18nSpaceType }}</el-button>
     </el-col>
   </el-row>
   
@@ -53,14 +53,13 @@
   const selectedSpaceType = ref(null)
   const displayCreateSpaceType = ref(false)
 
-
   //  computed
   const i18nCreate = computed(() => { return t('message.create') })
   const i18nSpaceType = computed(() => { return t('message.spaceType') })
   const iGroup = computed(()=> { return t('message.spaceType') })
     
   const closeCreateSpaceType = () => {
-    this.displayCreateSpaceType = false
+    displayCreateSpaceType.value = false
     //  reset
   }
   const createSpaceType = ( o ) => {

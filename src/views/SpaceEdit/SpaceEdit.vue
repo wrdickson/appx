@@ -1,8 +1,7 @@
 <template>
- 
   <el-row>
     <el-col :span="12">
-      <el-button @click="showCreateSpace = true, selectedSpace = null" type="primary" size="small">{{$t('message.createSpace')}}</el-button>
+      <el-button @click="showCreateSpace = true, selectedSpace = null" type="primary" plain >{{$t('message.createSpace')}}</el-button>
       <el-divider/>
       <rootSpaceTree
         v-if="rootSpaces"
@@ -155,7 +154,6 @@
         message: err
       })
     })
-      
   }
 
   onMounted( () => {

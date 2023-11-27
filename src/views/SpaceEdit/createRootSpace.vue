@@ -3,7 +3,7 @@
     <template #header>
       <div class="card-header">
         <span>{{t('message.createSpace')}}</span>
-        <el-button class="button" size="small" @click="emitClose">{{t('message.close')}}</el-button>
+        <el-button class="button" plain @click="emitClose">{{t('message.close')}}</el-button>
       </div>
     </template>
       <el-form
@@ -60,7 +60,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button  @click="createSpace">{{t('message.createSpace')}}</el-button>
+          <el-button  plain @click="createSpace">{{t('message.createSpace')}}</el-button>
         </el-form-item>
       </el-form>
   </el-card>

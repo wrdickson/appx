@@ -19,8 +19,8 @@
       <el-input v-model="cSpaceType.display_order"/>
     </el-form-item>
     <el-form-item>
-      <el-button type="danger" @click="close">{{ i18nClose }}</el-button>
-      <el-button type="success" @click="createSpaceType(createSpaceTypeRef)">{{i18nCreate}}&nbsp{{i18nSpaceType}}</el-button>
+      <el-button type="danger" plain @click="close">{{ i18nClose }}</el-button>
+      <el-button type="success" plain @click="createSpaceType(createSpaceTypeRef)">{{i18nCreate}}&nbsp{{i18nSpaceType}}</el-button>
     </el-form-item>
   </el-form>
 </template>

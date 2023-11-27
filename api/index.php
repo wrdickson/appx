@@ -38,6 +38,9 @@ $f3->set('AUTOLOAD', 'controller/');
 $f3->route('GET /test', 'Test_Controller->index');
 $f3->route('GET /test/do-something', 'Test_Controller->do_something');
 
+//  ACCOUNTS
+$f3->route('POST /accounts-pagination', 'Account_Controller->get_accounts_pagination');
+
 //  AUTH
 $f3->route('POST /login', 'Auth_Controller->login');
 $f3->route('POST /authorize-token', 'Auth_Controller->authorize_token');

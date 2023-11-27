@@ -3,7 +3,7 @@
     <template #header>
       <div class="card-header">
         <span>{{t('message.editSpace')}}</span>
-        <el-button class="button" size="small" @click="emitClose">{{t('message.close')}}</el-button>
+        <el-button class="button" plain @click="emitClose">{{t('message.close')}}</el-button>
       </div>
     </template>
       <el-form
@@ -62,7 +62,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="updateSpace">{{t('message.update')}}</el-button>
+          <el-button type="primary" plain @click="updateSpace">{{t('message.update')}}</el-button>
         </el-form-item>
       </el-form>
       <el-divider/>
@@ -73,7 +73,7 @@
           :cancel-button-text="i18No"
           @confirm="deleteSpace">
           <template #reference>
-            <el-button size="small" style="float: right; margin-top: -15px; margin-bottom: 10px;" type="danger">{{i18DeleteSpace}}</el-button>
+            <el-button plain style="float: right; margin-top: -15px; margin-bottom: 10px;" type="danger">{{i18DeleteSpace}}</el-button>
           </template>
         </el-popconfirm>
       </div>
