@@ -165,6 +165,21 @@ Class Validate {
     }
   }
 
+  private function is_between ( $input, $args_array ) {
+    $min = $args_array[0];
+    $max = $args_array[1];
+    if ($input >= $min && $input <= $max) {
+      return array (
+        'test' => true
+      ); 
+    } else {
+      return array (
+        'test' => false,
+        'error' => 'is not between ' . $min . ' and ' . $max
+      );
+    }
+  }
+
   /**
    * is_length
    * 
@@ -282,7 +297,7 @@ Class Validate {
     } else { 
       return array(
         'test' => false,
-        'error' => 'is not an integer',
+        'error' => 'is not an integer'
       );
     }
   }

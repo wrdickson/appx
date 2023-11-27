@@ -2,6 +2,7 @@
   <h4>Edit Account</h4>
   <div class="form-wrapper">
     <el-form
+      v-if="accountCopy"
       :model="accountCopy"
       size="small" 
       label-width="120px">
@@ -30,9 +31,19 @@
         <el-input v-model="newRole"/>
         <el-button @click="addRole">add</el-button>
       </el-form-item>
+      <el-form-item label="is active">
+        <el-switch
+          v-model="accountCopy.is_active"
+          active-value="1"
+          inactive-value="0"
+          active-text="true"
+          inactive-text="false"
+        >
+        </el-switch>
+      </el-form-item>
       <el-button @click="cancel">Cancel</el-button>
       <el-button @click="revert">Revert</el-button>
-      <el-button @click="saveAccount">Save</el-button>
+      <el-button @click="updateAccount">Save</el-button>
     </el-form>
   </div>  
 </template>
@@ -42,9 +53,11 @@
   import _ from 'lodash'
 
   const props = defineProps(['selectedAccount'])
-  const emit = defineEmits(['editor-cancel'])
+  const emit = defineEmits(['editor-cancel', 'editor-update-account'])
 
   const accountCopy = ref(_.cloneDeep(props.selectedAccount))
+
+  const copyIsActive = ref(_.cloneDeep(props.selectedAccount.is_active))
 
   const newRole = ref('')
 
@@ -60,7 +73,7 @@
   }
 
   const removeRole = (role, index) => {
-    console.log(role, index)
+    //console.log(role, index)
     accountCopy.value.roles.splice( index, 1)
   }
 
@@ -70,23 +83,34 @@
     //  we have to burrow in and remove reactivity 
     //  on objects/ arrays within objects/arrays
     accountCopy.value.roles = _.cloneDeep(props.selectedAccount.roles)
+    //  also, we have to tweak is_active to be a string!!!
+    if(props.selectedAccount.is_active){
+      accountCopy.value.is_active = "1"
+    } else {
+      accountCopy.value.is_active = "0"
+    }
   }
 
-  const saveAccount = () => {
+  const updateAccount = () => {
+    /*
     console.table(_.cloneDeep(accountCopy.value))
+    console.log('typeof is_active on copy')
+    console.log( typeof accountCopy.value.is_active)
+    console.log(JSON.stringify(accountCopy.value))
+    */
+    let c = _.cloneDeep(accountCopy.value)
+    // make is_active an int
+    c.is_active = parseInt(c.is_active)
+    emit('editor-update-account', c)
   }
 
   onMounted( () => {
-    console.log('mounted')
-  })
-
-  //  we have to watch a property, not the entire object
-  watch( () => props.selectedAccount.id, ( newId ) => {
-    newRole.value = ''
-    accountCopy.value = _.cloneDeep(props.selectedAccount)
-    //  we have to burrow in and remove reactivity 
-    //  on objects/ arrays within objects/arrays
-    accountCopy.value.roles = _.cloneDeep(props.selectedAccount.roles)
+    //  IMPORTANT!!! convert is_active to string
+    if(props.selectedAccount.is_active){
+      accountCopy.value.is_active = "1"
+    } else {
+      accountCopy.value.is_active = "0"
+    }
   })
 
 </script>

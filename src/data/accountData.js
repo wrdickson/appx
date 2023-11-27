@@ -16,6 +16,18 @@ export const accountData = {
       url: 'api/accounts-pagination/'
     })
     return request
+  },
+
+  updateAccount: ( obj ) => {
+    const request = axios({
+      method: 'post',
+      data: obj,
+      headers: { 
+        jwt: authStore().token
+      },
+      url: 'api/accounts-update/'
+    })
+    return request
   }
 
 }
