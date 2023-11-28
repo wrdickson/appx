@@ -186,7 +186,8 @@ class Installer {
       `last_activity` datetime NOT NULL,
       `last_login` datetime NOT NULL,
       `is_active` tinyint(4) NOT NULL,
-      PRIMARY KEY (`id`)
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `username` (`username`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
     $stmt = $this->pdo->prepare( $create_accounts_sql );
     if( $execute = $stmt->execute() ) {

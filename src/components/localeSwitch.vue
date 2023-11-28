@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select @change="handleLocaleChange" size="small" class="menuLangSelect" v-model="$i18n.locale">
+    <el-select style="margin-top: 6px; margin-right: 4px;" @change="handleLocaleChange" size="small" class="menuLangSelect" v-model="$i18n.locale">
       <el-option
         v-for="(lang, i) in langs"
         :key="`lang-${i}`"

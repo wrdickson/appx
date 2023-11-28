@@ -26,7 +26,14 @@ import {
   faChevronRight,
   faChevronDown,
   faCircleArrowDown,
-  faWindowClose
+  faWindowClose,
+  faGauge,
+  faCalendarDays,
+  faHouse,
+  faArrowRightToBracket,
+  faArrowRight,
+  faRightFromBracket,
+  faCashRegister
 } from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
@@ -37,7 +44,14 @@ library.add(
   faChevronDown,
   faCircleArrowRight,
   faCircleArrowDown,
-  faWindowClose
+  faWindowClose,
+  faGauge,
+  faCalendarDays,
+  faHouse,
+  faArrowRightToBracket,
+  faArrowRight,
+  faRightFromBracket,
+  faCashRegister
 )
 
 

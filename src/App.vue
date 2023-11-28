@@ -8,28 +8,33 @@
           :router="true"
         >
 
-          <el-menu-item index="/">Home</el-menu-item>
-          <el-menu-item index="/dashboard">Dashboard</el-menu-item>
+          <el-menu-item index="/"><font-awesome-icon icon="fa-solid fa-house" size="2x" /></el-menu-item>
+          <el-menu-item index="/dashboard"><font-awesome-icon icon="fa-solid fa-gauge" size="2x" /></el-menu-item>
+          <el-menu-item index="/workbench"><font-awesome-icon icon="fa-solid fa-calendar-days" size="2x" /></el-menu-item>
+          <el-menu-item index=""><font-awesome-icon icon="fa-solid fa-cash-register" size="2x"/></el-menu-item>
+          <!--
           <el-sub-menu index="1">
-            <template #title>Reservations</template>
+            <template #title><font-awesome-icon icon="fa-solid fa-calendar-days" size="2x" /></template>
             <el-menu-item index="/create-reservation">Create Reservation</el-menu-item>
             <el-menu-item index="/res-view">ResView</el-menu-item>
             <el-menu-item index="/workbench">Workbench</el-menu-item>
           </el-sub-menu>
-          
+          -->
 
+          <!--
           <el-sub-menu index="2">
             <template #title>Debug</template>
             <el-menu-item index="/test">Test</el-menu-item>
             <el-menu-item index="/ref-reactive">Ref-Reactive</el-menu-item>
             <el-menu-item index="props-play">Props</el-menu-item>
           </el-sub-menu>
+          -->
 
           <div class="flex-grow"></div>
           <el-menu-item v-if="account.id < 1" index="/login">Login</el-menu-item>
-          <el-menu-item v-if="account.id > 0" index="/logoff">{{account.username}} - Logoff</el-menu-item>
+          <el-menu-item v-if="account.id > 0" index="/logoff">Logoff</el-menu-item>
           <localeSwitch/>
-          <el-button size="small" @click="toggleDark()">
+          <el-button size="small" @click="toggleDark()" style="margin-top: 6px;">
             Is Dark: {{ isDark }}
           </el-button>
         </el-menu>
@@ -145,7 +150,7 @@
 <style>
   body {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
+    font-size: 15px;
   }
   .flex-grow {
     flex-grow: 1;

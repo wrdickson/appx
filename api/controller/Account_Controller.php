@@ -1,8 +1,45 @@
 <?php
 
 Class Account_Controller {
-  public function foo ( $f3) {
-    print 'hello';
+
+  public function create_account ( $f3 ) {
+    $perms = ['permission' => 7, 'role' => 'edit_accounts'];
+    $f3auth = F3Auth::authorize_token( $f3, $perms);
+  
+    $account = $f3auth['decoded']->account;
+    $params = json_decode($f3->get('BODY'), true);
+
+    //  validate
+    $options = array (
+      'email' => array (
+        'is_email'
+      ),
+      'is_active' => array (
+        'is_0_or_1'
+      ),
+      'password' => array(
+        'is_length, 6, 36'
+      ),
+      'permission' => array (
+        'is_integer',
+        'is_between, 0, 12'
+      ),
+      'username' => array (
+        'is_length, 4, 24'
+      )
+    );
+    $validator = new Validate( $params, $options);
+    $v = $validator->validate();
+    if( $v['valid'] ) {
+      //  proceed
+      $newAccountId = Accounts::create_account($params['username'], $params['password'], $params['permission'], $params['roles'], $params['email'], $params['is_active']);
+      $response['new_account_id'] = $newAccountId;
+      $account = new Account($newAccountId);
+      $response['new_account'] = $account->to_array();
+    } else {
+      $f3->error(400, 'invalid update paramaters');
+    }
+    print json_encode($response);
   }
 
   public function get_accounts_pagination ( $f3 ) {
@@ -44,17 +81,12 @@ Class Account_Controller {
     print json_encode($response);
   }
 
+  //  this one does NOT allow us to change username or password
   public function update_account ( $f3 ) {
+    sleep(3);
     $perms = ['permission' => 7, 'role' => 'edit_accounts'];
     $f3auth = F3Auth::authorize_token( $f3, $perms);
-  
-    $account = $f3auth['decoded']->account;
     $params = json_decode($f3->get('BODY'), true);
-
-    $response['account'] = $account;
-    $response['params'] = $params;
-
-
     $options = array (
       'id' => array (
         'is_integer'
@@ -68,20 +100,35 @@ Class Account_Controller {
       'permission' => array (
         'is_integer',
         'is_between, 0, 12'
+      ),
+      'username' => array (
+        'is_length, 4, 24'
       )
     );
-
-    $test_values = $params;
-
-    $v = new Validate( $test_values, $options);
-    
-    $response['valid'] = $v->validate();
-
-    
-
-
-
-
+    $v = new Validate( $params, $options);
+    $valid_result = $v->validate();
+    if($valid_result['valid'] == 1){
+      //  update account
+      $account = new Account($params['id']);
+      $response['orig'] = $account->to_array();
+      if($params['email'] !== $account->get_email() ) {
+        $response['set_email'] = $account->set_email($params['email']);
+      }
+      if($params['is_active'] !== $account->get_is_active()) {
+        $response['set_is_active'] = $account->set_is_active($params['is_active']);
+      }
+      if($params['permission'] !== $account->get_permission()) {
+        $response['set_permission'] = $account->set_permission($params['permission']);
+      }
+      if($params['roles'] !== $account->get_roles() ) {
+        //$response['sr'] = json_encode($params['roles']);
+        $response['set_roles'] = $account->set_roles(json_encode($params['roles']));
+      }
+    } else {
+      $f3->error(400, 'invalid update paramaters');
+    }
+    $final = new Account($params['id']);
+    $response['updated_account'] = $final->to_array();
     print json_encode($response);
   }
 }

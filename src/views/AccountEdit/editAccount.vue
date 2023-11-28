@@ -1,5 +1,5 @@
 <template>
-  <h4>Edit Account</h4>
+  <h4>{{selectedAccount.username}} : edit</h4>
   <div class="form-wrapper">
     <el-form
       v-if="accountCopy"
@@ -7,7 +7,7 @@
       size="small" 
       label-width="120px">
       <el-form-item label="username">
-        <el-input v-model="accountCopy.username"/>
+        <el-input disabled v-model="accountCopy.username"/>
       </el-form-item>
       <el-form-item label="email">
         <el-input v-model="accountCopy.email"/>
@@ -45,7 +45,7 @@
       <el-button @click="revert">Revert</el-button>
       <el-button @click="updateAccount">Save</el-button>
     </el-form>
-  </div>  
+  </div>
 </template>
 
 <script setup>
@@ -56,8 +56,6 @@
   const emit = defineEmits(['editor-cancel', 'editor-update-account'])
 
   const accountCopy = ref(_.cloneDeep(props.selectedAccount))
-
-  const copyIsActive = ref(_.cloneDeep(props.selectedAccount.is_active))
 
   const newRole = ref('')
 
@@ -73,7 +71,6 @@
   }
 
   const removeRole = (role, index) => {
-    //console.log(role, index)
     accountCopy.value.roles.splice( index, 1)
   }
 
@@ -92,12 +89,6 @@
   }
 
   const updateAccount = () => {
-    /*
-    console.table(_.cloneDeep(accountCopy.value))
-    console.log('typeof is_active on copy')
-    console.log( typeof accountCopy.value.is_active)
-    console.log(JSON.stringify(accountCopy.value))
-    */
     let c = _.cloneDeep(accountCopy.value)
     // make is_active an int
     c.is_active = parseInt(c.is_active)
@@ -106,6 +97,7 @@
 
   onMounted( () => {
     //  IMPORTANT!!! convert is_active to string
+    //  so el-switch can bind to it
     if(props.selectedAccount.is_active){
       accountCopy.value.is_active = "1"
     } else {
