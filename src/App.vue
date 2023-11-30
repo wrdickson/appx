@@ -11,7 +11,7 @@
           <el-menu-item index="/"><font-awesome-icon icon="fa-solid fa-house" size="2x" /></el-menu-item>
           <el-menu-item index="/dashboard"><font-awesome-icon icon="fa-solid fa-gauge" size="2x" /></el-menu-item>
           <el-menu-item index="/workbench"><font-awesome-icon icon="fa-solid fa-calendar-days" size="2x" /></el-menu-item>
-          <el-menu-item index=""><font-awesome-icon icon="fa-solid fa-cash-register" size="2x"/></el-menu-item>
+          <el-menu-item index="/pos"><font-awesome-icon icon="fa-solid fa-cash-register" size="2x"/></el-menu-item>
           <!--
           <el-sub-menu index="1">
             <template #title><font-awesome-icon icon="fa-solid fa-calendar-days" size="2x" /></template>
@@ -150,7 +150,7 @@
 <style>
   body {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 15px;
+    font-size: 12px;
   }
   .flex-grow {
     flex-grow: 1;

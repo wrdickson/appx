@@ -142,7 +142,6 @@ export default {
           //  don't present if iReservation.is_assigned == 0 (ie is unassigned)
           if(iRecord && iReservation.is_assigned){ 
             //  first present the reservation
-
             if( dayjs(iReservation.checkout).isAfter(dayjs(this.resViewEndDate)) ){
               coInRange = false
             } else {
@@ -283,8 +282,6 @@ export default {
           }
           //  NOW, we handle unassigned reservations
           if(iReservation.is_assigned == 0) {
-            //console.log('iReservation @ handle unassigned')
-            //console.table(iReservation)
             let iDate = dayjs(iReservation.checkin).format('YYYYMMDD')
             let sKey = 'D' + iDate + 'unassigned'
             let qRecord = _.find(spaceRecords, (o) => {

@@ -15,6 +15,10 @@ export const routes = [
   {
     path: '/dashboard',
     component: () => import('@/views/Dashboard/Dashboard.vue')
+  },
+  {
+    path: '/pos',
+    component: () => import('@/views/Pos/PosView.vue')
   }
 
 ]

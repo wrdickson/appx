@@ -33,7 +33,8 @@ import {
   faArrowRightToBracket,
   faArrowRight,
   faRightFromBracket,
-  faCashRegister
+  faCashRegister,
+  faFireFlameCurved
 } from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
@@ -51,7 +52,8 @@ library.add(
   faArrowRightToBracket,
   faArrowRight,
   faRightFromBracket,
-  faCashRegister
+  faCashRegister,
+  faFireFlameCurved
 )
 
 

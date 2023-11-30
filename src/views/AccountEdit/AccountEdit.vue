@@ -11,6 +11,7 @@
       :selectedAccount="selectedAccount"
       @editor-cancel="editorCancel"
       @editor-update-account="updateAccount"
+      @reset-password="resetPassword"
     />
   </div>
 
@@ -49,15 +50,19 @@
   }
 
   const createNewAccount= ( str ) => {
+    //  trigger loader
     loadingCreate.value = true
+    //  nice clean nonreactive object
     let newAccount = JSON.parse(str)
     //  type permission and is_active to int
     newAccount.permission = parseInt(newAccount.permission)
     newAccount.is_active = parseInt(newAccount.is_active)
     newAccount.password = newAccount.password1
+    //  clean out unneeded properties
     delete newAccount.password1
     delete newAccount.password2
     delete newAccount.newRole
+    //  go
     accountData.createAccount(newAccount).then( response => {
       loadingCreate.value = false
       if(response.data.new_account_id){
@@ -67,7 +72,7 @@
           showClose: true,
           type: 'success',
         })
-        //  trigger chile component to clear inputs
+        //  trigger child component to clear inputs
         createAccountClearTrigger.value += 1
       } else {
         ElMessage({
@@ -90,6 +95,28 @@
   const editorCancel = () => {
     console.log('ec')
     selectedAccount.value = null
+  }
+
+  const resetPassword = ( e ) => {
+    console.log('resetPassword on AccountEdit.vue', e)
+    console.log(selectedAccount.value.id)
+    loadingUpdate.value = true
+    accountData.updatePassword( selectedAccount.value.id, e ).then( response => {
+      loadingUpdate.value = false
+      console.log(response.data)
+      ElMessage({
+        message: 'Account was updated.',
+        type: 'success',
+      })
+    }).catch( error => {
+      loadingUpdate.value = false
+      ElMessage({
+        dangerouslyUseHTMLString: true,
+        message: error.request.response,
+        showClose: true,
+        type: 'error',
+      })
+    })
   }
 
   const showCreate = () => {

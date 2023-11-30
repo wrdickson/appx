@@ -3,6 +3,20 @@ import { authStore } from '@/stores/authStore.js'
 
 export const accountData = {
 
+  updatePassword: ( id, pwd ) => {
+    const promise = axios({
+      method: 'post',
+      data: {
+        id: id,
+        pwd: pwd
+      },
+      headers: { jwt: authStore().token },
+      url: 'api/accounts-update-pwd/'
+
+    })
+    return promise
+  },
+
   createAccount: ( obj ) => {
     const promise = axios({
       method: 'post',

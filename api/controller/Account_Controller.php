@@ -5,10 +5,8 @@ Class Account_Controller {
   public function create_account ( $f3 ) {
     $perms = ['permission' => 7, 'role' => 'edit_accounts'];
     $f3auth = F3Auth::authorize_token( $f3, $perms);
-  
     $account = $f3auth['decoded']->account;
     $params = json_decode($f3->get('BODY'), true);
-
     //  validate
     $options = array (
       'email' => array (
@@ -37,7 +35,7 @@ Class Account_Controller {
       $account = new Account($newAccountId);
       $response['new_account'] = $account->to_array();
     } else {
-      $f3->error(400, 'invalid update paramaters');
+      $f3->error(400, 'invalid update parameters');
     }
     print json_encode($response);
   }
@@ -45,21 +43,14 @@ Class Account_Controller {
   public function get_accounts_pagination ( $f3 ) {
     $perms = ['permission' => 7, 'role' => 'edit_accounts'];
     $f3auth = F3Auth::authorize_token( $f3, $perms);
-  
     $account = $f3auth['decoded']->account;
     $params = json_decode($f3->get('BODY'), true);
-
-    $response['account'] = $account;
-    $response['params'] = $params;
-
     $pdo = DataConnector::get_connection();
-
     //  first get total rows
     $stmt_count = $pdo->prepare("SELECT id FROM accounts");
     $stmt_count->execute();
     $row_count = $stmt_count->rowCount();
     $response['row_count'] = $row_count;
-    
     $stmt = $pdo->prepare("SELECT * FROM ACCOUNTS ORDER BY username ASC LIMIT :offset, :limit");
     $stmt->execute([
       ':offset' => $params['offset'],
@@ -77,13 +68,10 @@ Class Account_Controller {
       array_push($arr, $i);
     }
     $response['accounts'] = $arr;
-
     print json_encode($response);
   }
-
   //  this one does NOT allow us to change username or password
   public function update_account ( $f3 ) {
-    sleep(3);
     $perms = ['permission' => 7, 'role' => 'edit_accounts'];
     $f3auth = F3Auth::authorize_token( $f3, $perms);
     $params = json_decode($f3->get('BODY'), true);
@@ -121,14 +109,37 @@ Class Account_Controller {
         $response['set_permission'] = $account->set_permission($params['permission']);
       }
       if($params['roles'] !== $account->get_roles() ) {
-        //$response['sr'] = json_encode($params['roles']);
         $response['set_roles'] = $account->set_roles(json_encode($params['roles']));
       }
     } else {
-      $f3->error(400, 'invalid update paramaters');
+      $f3->error(400, 'invalid update parameters');
     }
     $final = new Account($params['id']);
     $response['updated_account'] = $final->to_array();
     print json_encode($response);
+  }
+
+  public function update_password( $f3 ) {
+    $perms = ['permission' => 7, 'role' => 'edit_accounts'];
+    $f3auth = F3Auth::authorize_token( $f3, $perms);
+    $params = json_decode($f3->get('BODY'), true);
+    $response['params'] = $params;
+    $options = array (
+      'id' => array (
+        'is_integer'
+      ),
+      'pwd' => array (
+        'is_length, 4, 24'
+      )
+    );
+    $v = new Validate( $params, $options);
+    $valid_result = $v->validate();
+    if($valid_result['valid'] == 1){
+      $account = new Account($params['id']);
+      $response['update'] = $account->set_password( $params['pwd']);
+      
+    } else {
+      $f3->error(400, 'invalid update parameters');
+    }
   }
 }

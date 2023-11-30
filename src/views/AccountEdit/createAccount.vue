@@ -148,19 +148,21 @@
 
   const clearInputs = () => {
     cAccount.value = {
-        username: '',
-        email: '',
-        password1: '',
-        password2: '',
-        permission: '1',
-        roles: [],
-        is_active: "1",
-        newRole: ''
-      }
+      username: '',
+      email: '',
+      password1: '',
+      password2: '',
+      permission: '1',
+      roles: [],
+      is_active: "1",
+      newRole: ''
     }
+  }
+
   const close = () => {
     emit('close-create-view')
   }
+
   const createAccount = ( createAccountRef ) => {
     createAccountRef.validate( valid => {
       if( valid ) {
