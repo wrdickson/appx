@@ -40,10 +40,7 @@ export const rootSpacesData = {
 
   getRootSpaces: ( ) => {
     const request = axios({
-      method: 'post',
-      headers: { 
-        'Jwt': authStore().token
-      },
+      method: '',
       url: 'api/root-spaces'
     })
     return request

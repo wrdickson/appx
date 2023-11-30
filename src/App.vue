@@ -32,7 +32,7 @@
 
           <div class="flex-grow"></div>
           <el-menu-item v-if="account.id < 1" index="/login">Login</el-menu-item>
-          <el-menu-item v-if="account.id > 0" index="/logoff">Logoff</el-menu-item>
+          <el-menu-item v-if="account.id > 0" index="/logoff">{{username}} - Logoff</el-menu-item>
           <localeSwitch/>
           <el-button size="small" @click="toggleDark()" style="margin-top: 6px;">
             Is Dark: {{ isDark }}
@@ -73,18 +73,22 @@
 
   //  REFS
   const authCompleted = ref(false)
-  const optionsLoaded = ref(true)
+  const optionsLoaded = ref(false)
 
   const rootSpacesLoaded = ref(false)
   const spaceTypesLoaded = ref(false)
 
   //  COMPUTED
   const dataLoaded = computed( () => {
-    if( rootSpacesLoaded && spaceTypesLoaded ) {
+    if( rootSpacesLoaded.value == true && spaceTypesLoaded.value == true ) {
       return true
     }  else {
       return false
     }
+  })
+
+  const username = computed( () => {
+    return authStore().account.username
   })
 
   //  HANDLE DARK/LIGHT TOGGLE
@@ -124,13 +128,13 @@
       authStore().setAccountToGuest()
       //router.push('/Login')
       authCompleted.value = true
-      //loadInitialData()
+      loadInitialData()
     })
   } else {
     authStore().setAccountToGuest()
     //router.push('/Login')
     authCompleted.value = true
-    //loadInitialData()
+    loadInitialData()
   }
   const account = computed( () => {
     return authStore().account
@@ -138,12 +142,12 @@
 
   //  HANDLE OPTIONS DATA, WHICH IS A PROP FROM MAIN.JS
   optionsStore().setAutoloadOptions(props.autoloadOptions)
-  optionsLoaded.value = true
   const optionLocale = _.find(props.autoloadOptions, o => {
     return o.option_name == 'default_locale'
   })
   const defaultLocale = optionLocale.option_value
   localeStore().setComponentLocale(defaultLocale)
+  optionsLoaded.value = true
 
 </script>
 

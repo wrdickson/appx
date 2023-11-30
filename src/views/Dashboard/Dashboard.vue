@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside width="150px" class="hidden-xs-only">
+    <el-aside width="150px">
       <el-scrollbar>
         <el-menu class="el-menu-dashboard">
           <el-menu-item @click="hideAllViews(), showSpaceEdit=true" index="1-1">Space</el-menu-item>

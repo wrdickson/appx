@@ -64,13 +64,13 @@ $f3->route('POST /reservations/range-ignore-res', 'Reservation_Controller->check
 $f3->route('POST /reservations/update1/', 'Reservation_Controller->update_reservation_1');
 
 //  ROOT SPACES
-$f3->route('POST /root-spaces', 'Root_Space_Controller->get_root_spaces');
+$f3->route('GET /root-spaces', 'Root_Space_Controller->get_root_spaces');
 $f3->route('POST /root-spaces/update/@root_space_id', 'Root_Space_Controller->update_root_space');
 $f3->route( 'POST /root-spaces-create', 'Root_Space_Controller->create_root_space');
 $f3->route('POST /root-spaces-delete', 'Root_Space_Controller->delete_root_space');
 
 //  SPACE TYPES
-$f3->route('POST /space-types', 'Space_Type_Controller->get_space_types');
+$f3->route('GET /space-types', 'Space_Type_Controller->get_space_types');
 $f3->route('POST /space-type-update', 'Space_Type_Controller->update_space_type');
 $f3->route('POST /space-type-create', 'Space_Type_Controller->create_space_type');
 $f3->route('POST /space-type-delete', 'Space_Type_Controller->delete_space_type');

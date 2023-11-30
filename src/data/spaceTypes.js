@@ -15,10 +15,7 @@ export const spaceTypesData = {
   },
   getSpaceTypes: ( ) => {
     const promise = axios({
-      method: 'post',
-      headers: {
-        'jwt': authStore().token
-      },
+      method: 'get',
       url: 'api/space-types'
     })
     return promise
