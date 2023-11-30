@@ -60,7 +60,8 @@ class Installer {
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $this->pdo = $pdo;
     } catch ( PDOException $e ) {
-      return $e->getMessage();
+      throw new Exception('unable to connet to database');
+      
     }
 
     //  use Brick/Money to generate 
@@ -127,24 +128,33 @@ class Installer {
 
   public function create_tables () {
     //  FIRST disable foreign key checks so we can drop tables
+    echo "<p>create_tables() . . .</p>";
     $sql = "SET FOREIGN_KEY_CHECKS = 0";
     $stmt = $this->pdo->prepare($sql);
     if( $stmt->execute() ) {
       echo "<p>FOREIGN_KEY_CHECKS = 0  . . .</p>";
+    }else{
     }
     //  accounts
+    echo "<p>accounts_drop . . .</p>";
     $this->accounts_drop();
+    echo "<p>accounts_create . . .</p>";
     $this->accounts_create();
+    echo "<p>accouonts_insert_admin . . .</p>";
     $this->accounts_insert_admin();
     //  options
     $this->options_drop();
+    echo "<p>options_create() . . .</p>";
     $this->options_create();
+    echo "<p>options_insert() . . .</p>";
     $this->options_insert();
     //  customers
     $this->customers_drop();
     $this->customers_create();
+    echo "<p>insert_house_account() . . .</p>";
     $this->customers_insert_house_account();
     //  do this AFTER customers_insert_house_account() . . . 
+    echo "<p>insert_folio_option() . . .</p>";
     $this->customers_insert_folio_option();
     //  space_types
     $this->space_types_drop();
@@ -552,6 +562,8 @@ class Installer {
     fwrite( $f, $s );
     $s = "// written from Installer Class test: 2\n";
     fwrite( $f, $s );
+
+    echo "<p>Config file written . . .</p>";
   }
 
   public function x_insert_initial_data () {
@@ -623,7 +635,7 @@ class Installer {
     ";
     $stmt = $this->pdo->prepare($sql);
     if( $stmt->execute() ) {
-      echo "<p>Initail customers inserted . . .</p>";
+      echo "<p>Initial customers inserted . . .</p>";
     }
 
     //  space_types
@@ -637,7 +649,7 @@ class Installer {
     ";
     $stmt = $this->pdo->prepare($sql);
     if( $stmt->execute() ) {
-      echo "<p>Initail space_types inserted . . .</p>";
+      echo "<p>Initial space_types inserted . . .</p>";
     }
 
     //  root_spaces

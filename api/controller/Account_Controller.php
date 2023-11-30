@@ -51,7 +51,7 @@ Class Account_Controller {
     $stmt_count->execute();
     $row_count = $stmt_count->rowCount();
     $response['row_count'] = $row_count;
-    $stmt = $pdo->prepare("SELECT * FROM ACCOUNTS ORDER BY username ASC LIMIT :offset, :limit");
+    $stmt = $pdo->prepare("SELECT * FROM accounts ORDER BY username ASC LIMIT :offset, :limit");
     $stmt->execute([
       ':offset' => $params['offset'],
       ':limit' => $params['limit']

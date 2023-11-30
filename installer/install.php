@@ -45,7 +45,8 @@
           //  TODO: a little validation here, huh?
 
           //  THIS WILL THROW IF PDO CAN'T CONNECT
-          $installer = new Installer ( 
+          try {
+            $installer = new Installer ( 
             $db_user, 
             $db_pass,
             $db_name,
@@ -62,9 +63,16 @@
             $time_zone,
             $unassigned_space_name
           );
+        } catch ( Exception $e ) {
+          echo $e->getMessage();
+        }
+
+
 
 
           $installer->write_config_file();
+
+          echo "<h1>HERE</h1>";
 
           $installer->create_tables();
 
