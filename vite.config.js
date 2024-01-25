@@ -21,19 +21,21 @@ export default defineConfig({
   },
   base: ''
 })
-//  in order to install the app anywhere in the server directory, 
+//  in order to install the app anywhere in the server directory 
 //  we do some things:
 //  1. router uses createWebHashHistory.  sorry, that just seems to be a limitation
+//     this is an app for priveleged users, not a brochure page
+//     we are anti-SEO
 //  2. base is set to an empty string as above
 //  3. all data request urls do NOT start with a slash : 'api/test', NOT '/api/test'
 //  4. when building/deploying, the contents of the dist folder
 //     go into whichever server subdirectory we are in
-//     so . .  file structure looks like this:
+//     so . . . directory structure in the target server subdirectory looks like this:
 //
 //    index.html
 //    > assets
 //    > api
-//    > installer [?]
+//    > installer
 //
 //  This way, the built app can be placed ANYWHERE on the deployment
 //  server.  Of course, db config stuff needs to be configured correctly

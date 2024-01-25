@@ -158,7 +158,7 @@
 
   onMounted( () => {
       //  load root spaces
-      rootSpacesData.getRootSpaces( ).then( response => {
+      rootSpacesData.getRootSpaces().then( response => {
         rootSpaces.value = response.data.root_spaces_children_parents
       })
 

@@ -7,7 +7,6 @@
     <title>installer.php</title>
   </head>
   <body>
-    
     <div class="container">
       <h1>Installer</h1>
       <div class="row">
@@ -15,6 +14,7 @@
           <?php
           require('../api/vendor/autoload.php');
           require('./lib/Installer.php');
+          require('./lib/Pos_Installer.php');
           require('lib/Validate.php');
 
           use \Brick\Money\Money;
@@ -66,21 +66,37 @@
         } catch ( Exception $e ) {
           echo $e->getMessage();
         }
-
-
-
-
           $installer->write_config_file();
 
-          echo "<h1>HERE</h1>";
+          echo "<p>Config file written . . .</p>";
 
           $installer->create_tables();
 
           $installer->apply_constraints();
 
-          //  DEBUG add dummy initial data
+          /*
+          *  DEBUG methods.  remove these for production
+          */
+          //  DEBUG insert initial data
           $installer->x_insert_initial_data();
+          //  DEBUG insert db config and jwt_key into options
+          $installer->x_write_config_data();
 
+          /*
+          *
+          *  POS INSTALLER
+          *  this must run after installing pms tables or constraints will fail
+          */
+          try {
+            $pos_installer = new Pos_Installer ( 
+            $db_user, 
+            $db_pass,
+            $db_name,
+            $db_host
+          );
+          } catch ( Exception $e ) {
+            echo $e->getMessage();
+          }
 
           ?>
       </div>
@@ -90,7 +106,6 @@
         margin-bottom: 4px;
       }
     </style>
-
     <script src="lib/bootstrap.bundle.min.js"></script>
   </body>
 </html>

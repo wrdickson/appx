@@ -679,4 +679,53 @@ class Installer {
     }
   }
 
+  public function x_write_config_data () {
+    //  db_host
+    $stmt = $this->pdo->prepare("INSERT INTO options ( option_name, option_value, autoload) values ( :n, :v, 0)");
+    $ex = $stmt->execute(array(
+      ':n' => 'db_host',
+      ':v' => $this->db_host
+    ));
+    if( $ex ) {
+      echo "<p>db_host inserted into options . . .</p>";
+    }
+    //  db_name
+    $stmt = $this->pdo->prepare("INSERT INTO options ( option_name, option_value, autoload) values ( :n, :v, 0)");
+    $ex = $stmt->execute(array(
+      ':n' => 'db_name',
+      ':v' => $this->db_name
+    ));
+    if( $ex ) {
+      echo "<p>db_name inserted into options . . .</p>";
+    }
+    //  db_user
+    $stmt = $this->pdo->prepare("INSERT INTO options ( option_name, option_value, autoload) values ( :n, :v, 0)");
+    $ex = $stmt->execute(array(
+      ':n' => 'db_user',
+      ':v' => $this->db_user
+    ));
+    if( $ex ) {
+      echo "<p>db_user inserted into options . . .</p>";
+    }
+    //  db_pass
+    $stmt = $this->pdo->prepare("INSERT INTO options ( option_name, option_value, autoload) values ( :n, :v, 0)");
+    $ex = $stmt->execute(array(
+      ':n' => 'db_pass',
+      ':v' => $this->db_pass
+    ));
+    if( $ex ) {
+      echo "<p>db_pass inserted into options . . .</p>";
+    }
+    //  jwt_key
+    $stmt = $this->pdo->prepare("INSERT INTO options ( option_name, option_value, autoload) values ( :n, :v, 0)");
+    $ex = $stmt->execute(array(
+      ':n' => 'jwt_key',
+      ':v' => $this->jwt_key
+    ));
+    if( $ex ) {
+      echo "<p>jwt_key inserted into options . . .</p>";
+    }
+
+  }
+
 }

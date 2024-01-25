@@ -1,5 +1,8 @@
 export const routes = [
-  //  AUTH
+  {
+    path: '/folio/:id',
+    component: () => import ('@/views/Folio/Folio.vue')
+  },
   {
     path: '/login',
     component: () => import('@/views/Login.vue') 

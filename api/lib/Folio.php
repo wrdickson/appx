@@ -4,12 +4,11 @@ Class Folio{
   //$id, $customer, and $reservaton are from the folio table
   private $id;
   private $customer;
-  //private $payments;
-  //private $sale_items;
-  //private $sale_detail;
+  private $sales;
+  
 
   public function __construct( $id ) {
-
+    $this->sales = array();
     $pdo = DataConnector::get_connection();
 
     //first get the basics: id, customer
@@ -21,73 +20,55 @@ Class Folio{
       $this->customer = $obj->customer;
       
     }
-/*  
-      //  1. sale items:
-    $stmt = $pdo->prepare("SELECT * FROM sale_items WHERE folio = :i");
+      //  1. sales:
+    $stmt = $pdo->prepare("SELECT * FROM sale WHERE folio = :i");
     $stmt->bindParam(':i', $id);
     $i = $stmt->execute();
-    $items_arr = array();
+    $sales = array();
     while($obj = $stmt->fetch(PDO::FETCH_OBJ)) {
       $arr = array();
       $arr['id'] = $obj->id;
       $arr['folio'] = $obj->folio;
-      $arr['sale_type'] = $obj->sale_type;
-      $arr['posted_by'] = $obj->posted_by;
-      $arr['description'] = $obj->description;
-      $arr['sale_datetime'] = $obj->sale_datetime;
-      $arr['sale_quantity'] = $obj->sale_quantity;
-      $arr['sale_price'] = $obj->sale_price;
-      $arr['sale_subtotal'] = $obj->sale_subtotal;
-      $arr['sale_tax'] = $obj->sale_tax;
+      $arr['sold_by'] = $obj->sold_by;
+      $arr['sale_date'] = $obj->sale_date;
+      $arr['payments'] = array();
+      $arr['items'] = array();
       
-      $arr['sale_total'] = $obj->sale_total;
-      $arr['tax_spread'] = json_decode( $obj->tax_spread, true );
-      array_push( $items_arr, $arr );
-    }
-    $this->sale_items = $items_arr;
+      //  get payments per sale
+      $stmt2 = $pdo->prepare("SELECT payment.id, payment.payment_type, payment.payment_amount, payment.payment_date, payment.payment_ref, payment_type.payment_title FROM payment INNER JOIN payment_type ON payment.payment_type = payment_type.id WHERE payment.sale = :si");
+      $stmt2->bindParam(':si', $arr['id']);
+      $stmt2->execute();
+      while($obj2 = $stmt2->fetch(PDO::FETCH_OBJ)){
+        $arr2 = array();
+        $arr2['sale_id'] = $obj2->id;
+        $arr2['type_id'] = $obj2->payment_type;
+        $arr2['amount'] = $obj2->payment_amount;
+        $arr2['date'] = $obj2->payment_date;
+        $arr2['ref'] = $obj2->payment_ref;
+        $arr2['type'] = $obj2->payment_title;
+        array_push($arr['payments'], $arr2);
+      }
 
-    // 2. payments
-    $stmt = $pdo->prepare("SELECT * FROM payments WHERE folio = :i");
-    $stmt->bindParam(':i', $id);
-    $i = $stmt->execute();
-    $payments_arr = array();
-    while( $obj = $stmt->fetch(PDO::FETCH_OBJ)) {
-      $arr = array();
-      $arr['id'] = $obj->id;
-      $arr['folio'] = $obj->folio;
-      $arr['payment_type'] = $obj->payment_type;
-      $arr['posted_by'] = $obj->posted_by;
-      $arr['datetime_posted'] = $obj->datetime_posted;
-      $arr['total'] = $obj->total;
-      array_push($payments_arr, $arr);
+      //  get sale items per sale
+      $stmt3 = $pdo->prepare("SELECT sale_item.id, sale_item.quantity, sale_item.unit_price, sale_item.subtotal, sale_item.tax, sale_item.tax_spread, product.product_title, product.sku, product.tax_group, tax_group.tax_group_title FROM sale_item INNER JOIN product ON sale_item.product = product.id INNER JOIN tax_group ON product.tax_group WHERE sale_item.sale = :si");
+      $stmt3->bindParam(':si', $arr['id']);
+      $stmt3->execute();
+      while($obj3 = $stmt3->fetch(PDO::FETCH_OBJ)){
+        $arr3 = array();
+        $arr3['id'] = $obj3->id;
+        $arr3['quantity'] = $obj3->quantity;
+        $arr3['unit_price'] = $obj3->unit_price;
+        $arr3['subtotal'] = $obj3->subtotal;
+        $arr3['tax'] = $obj3->tax;
+        $arr3['tax_spread'] = json_decode($obj3->tax_spread);
+        $arr3['product'] = $obj3->product_title;
+        $arr3['sku'] = $obj3->sku;
+        $arr3['tax_group'] = $obj3->tax_group_title;
+        array_push($arr['items'], $arr3);
+      }
     }
-    $this->payments = $payments_arr;
+    array_push($this->sales, $arr);
 
-    // 3. sale_detail
-    $stmt = $pdo->prepare("SELECT payments.id AS payment_id, payments.total AS payment_total, payments.datetime_posted AS posted_date, accounts.username as posted_by, sale_types.title, sale_items.description, sale_items.sale_quantity, sale_items.sale_price, sale_items.sale_subtotal, sale_items.sale_tax, sale_items.sale_total, payment_types.payment_title AS payment_type FROM payments LEFT JOIN sale_items ON payments.id = sale_items.payment_id INNER JOIN sale_types ON sale_items.sale_type = sale_types.id INNER JOIN accounts on payments.posted_by = accounts.id INNER JOIN payment_types on payments.payment_type = payment_types.id WHERE payments.folio = :i ORDER BY payments.id ASC");
-
-    $stmt->bindParam(":i", $id);
-    $i = $stmt->execute();
-    $payment_details_arr = array();
-    while($obj = $stmt->fetch(PDO::FETCH_OBJ)) {
-      $arr = array();
-      $arr['id'] = $obj->payment_id;
-      $arr['payment_total'] = $obj->payment_total;
-      $arr['posted_date'] = $obj->posted_date;
-      $arr['posted_by'] = $obj->posted_by;
-      $arr['title'] = $obj->title;
-      $arr['description'] = $obj->description;
-      $arr['sale_quantity'] = $obj->sale_quantity;
-      $arr['sale_price'] = $obj->sale_price;
-      $arr['sale_subtotal'] = $obj->sale_subtotal;
-      $arr['sale_tax'] = $obj->sale_tax;
-      $arr['sale_total'] = $obj->sale_total;
-      $arr['payment_type'] = $obj->payment_type;
-      array_push($payment_details_arr, $arr);
-    }
-    $this->sale_detail = $payment_details_arr;
-    //$this->sale_detail = $this->id;
-*/
 
   }
 
@@ -99,9 +80,7 @@ Class Folio{
     $arr = array();
     $arr['id'] = $this->id;
     $arr['customer'] = $this->customer;
-    //$arr['payments'] = $this->payments;
-    //$arr['sale_items'] = $this->sale_items;
-    //$arr['sale_detail'] = $this->sale_detail;
+    $arr['sales'] = $this->sales;
     return $arr;
   }
 }

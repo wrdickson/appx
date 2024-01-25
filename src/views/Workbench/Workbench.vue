@@ -1,13 +1,14 @@
 <template>
+  <el-button @click="clickResTab"></el-button>
   <splitpanes vertical class="default-theme" style="height: 100%;">
-    <pane size="30" style="height: 100%;">
-      <div >
-        <el-tabs type="border-card">
+    <pane size="33" style="height: 100%;">
+      <div>
+        <el-tabs type="border-card" ref="tabsRef">
           <el-tab-pane label="Create">
             <CreateReservation
             @create-reservation:reload-reservations="reloadReservations"/>
           </el-tab-pane>
-          <el-tab-pane label="Reservation">
+          <el-tab-pane label="Reservation" name="resTab" ref="resTabRef">
             <ReservationView
               v-if="selectedReservation"
               :selectedReservation="selectedReservation"
@@ -17,12 +18,13 @@
         </el-tabs>
       </div>
     </pane>
-    <pane size="70" style="background-color: #1c1b22;">
+    <pane size="67" style="background-color: #1c1b22;">
       <ResView
         @reservationSelected="reservationSelected"
         :reloadTrigger="resViewReloadTrigger"
       />
     </pane>
+
   </splitpanes>
 </template>
 
@@ -42,13 +44,24 @@
   const selectedReservation = ref(null)
   const resViewReloadTrigger = ref(1)
 
+  const resTabRef = ref()
+  const tabsRef = ref()
+
   //  METHODS
   const reloadReservations = () => {
     resViewReloadTrigger.value += 1
   }
 
+  const clickResTab = () => {
+    console.log('programatically generating a click event on tab-resTab')
+    let resTab = document.getElementById('tab-resTab')
+    resTab.click()
+  }
+
   const reservationSelected = ( res ) => {
     selectedReservation.value = res
+    //  generate a click on the res tab
+    clickResTab()
   }
 
   //  ONMOUNTED

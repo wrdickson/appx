@@ -23,9 +23,7 @@ $f3 = \Base::instance();
 
 //  get a db connection
 $db = new DB\SQL(
-  'mysql:host=' . DB_HOST. ';port=3306;dbname=' . DB_NAME,
-  DB_USER,
-  DB_PASS
+  'mysql:host=' . DB_HOST. ';port=3306;dbname=' . DB_NAME, DB_USER, DB_PASS
 );
 
 // assign the db connection to $f3 object
@@ -53,6 +51,9 @@ $f3->route('POST /authorize-token', 'Auth_Controller->authorize_token');
 $f3->route('POST /customers/search', 'Customer_Controller->search_customers');
 $f3->route('POST /customers/', 'Customer_Controller->create_customer');
 
+//  FOLIOS
+$f3->route('POST /folio/@id', 'Folio_Controller->get_folio');
+
 //  OPTIONS
 $f3->route('GET /autoload-options', 'Options_Controller->get_autoload_options');
 
@@ -66,7 +67,7 @@ $f3->route('POST /reservations/update1/', 'Reservation_Controller->update_reserv
 //  ROOT SPACES
 $f3->route('GET /root-spaces', 'Root_Space_Controller->get_root_spaces');
 $f3->route('POST /root-spaces/update/@root_space_id', 'Root_Space_Controller->update_root_space');
-$f3->route( 'POST /root-spaces-create', 'Root_Space_Controller->create_root_space');
+$f3->route('POST /root-spaces-create', 'Root_Space_Controller->create_root_space');
 $f3->route('POST /root-spaces-delete', 'Root_Space_Controller->delete_root_space');
 
 //  SPACE TYPES
