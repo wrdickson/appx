@@ -4,6 +4,7 @@
       <el-header>
         <el-menu
           mode="horizontal"
+          style="height: 40px"
           :ellipsis="false"
           :router="true"
         >

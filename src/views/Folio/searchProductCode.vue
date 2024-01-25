@@ -3,7 +3,9 @@
   <el-form>
     <el-form-item label="Search Term">
       <el-input v-model="searchTerm"/>
+      <!--
       <el-button @click="search">Search</el-button>
+      -->
     </el-form-item>
   </el-form>
   <el-table
@@ -12,10 +14,8 @@
     @row-click="selectProduct"
   >
     <el-table-column prop="product_title" label="Title" width="160"/>
-    <el-table-column prop="product_code" label="Code"/>
-    <el-table-column prop="priceFormat" label="Price"/>
-    <el-table-column prop="group_title" label="Group"/>
-    <el-table-column prop="subgroup_title" label="Subgroup"/>
+    <el-table-column prop="sku" label="sku"/>
+    <el-table-column prop="price" label="Price"/>
     <!--
     <el-table-column prop="tax_types" label="Tax Types"/>
     -->
@@ -40,8 +40,8 @@
 <script setup>
   import { computed, ref, watch } from 'vue'
   import { productData } from '@/data/productData.js'
-  import { dinero } from 'dinero.js'
   import _ from 'lodash'
+  import currency from 'currency.js'
   import  { optionsStore } from '@/stores/optionsStore.js'
 
   const emit = defineEmits(['selectProduct'])
@@ -63,19 +63,11 @@
   const productsF = computed( () => {
     let a = []
     _.each(products.value, product => {
-      const p = Dinero({
-        amount: parseInt(product.price),
-        precision: parseInt(currencyMinorUnits)
-      })
       let obj = {
         id: product.id,
         product_title: product.product_title,
-        product_code: product.product_code,
-        price: product.price,
-        priceFormat: parseFloat(p.toUnit()).toFixed(currencyMinorUnits),
-        group_title: product.group_title,
-        subgroup_title: product.subgroup_title,
-        tax_types: product.tax_types
+        sku: product.sku,
+        price: product.price
       }
       a.push(obj)
     })
@@ -88,7 +80,7 @@
 
   const search = () => {
     const args = { 
-      search_term: searchTerm.value, 
+      searchTerm: searchTerm.value, 
       offset: offset.value,
       pageSize: pageSize.value
      }
@@ -112,6 +104,10 @@
   watch( searchTerm, () => {
     search()
   })
-    
-
 </script>
+
+<style scoped>
+  .--el-table-header-bg-color{
+    background-color: blue !important;
+  }
+</style>

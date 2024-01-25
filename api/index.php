@@ -57,6 +57,9 @@ $f3->route('POST /folio/@id', 'Folio_Controller->get_folio');
 //  OPTIONS
 $f3->route('GET /autoload-options', 'Options_Controller->get_autoload_options');
 
+//  PRODUCT
+$f3->route('POST /product/search', 'Product_Controller->search_products_by_sku');
+
 //  RESERVATIONS
 $f3->route('POST /reservations/', 'Reservation_Controller->create_reservation');
 $f3->route('POST /reservations/range', 'Reservation_Controller->get_reservations_by_range');

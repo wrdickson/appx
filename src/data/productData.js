@@ -13,7 +13,7 @@ export const productData = {
       headers: { 
         'jwt': authStore().token
       },
-      url: 'api/product-search-code/'
+      url: 'api/product/search'
     })
     return request
   }

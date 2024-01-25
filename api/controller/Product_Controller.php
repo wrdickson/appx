@@ -1,9 +1,10 @@
 <?php
 
 Class Product_Controller {
-  //  this group of methods respond to router requests,
-  //  which always pass $f3 as a parameter
-  public function search_products_by_code ( $f3 ) {
+
+  //  public functions
+
+  public function search_products_by_sku ( $f3 ) {
     //  set the permission level on this action
     $perms = [ 'permission' => 3, 'role' => 'search_products' ];
     //  throws an error and stops execution if auth fails
@@ -21,7 +22,6 @@ Class Product_Controller {
     $limit = $params->pageSize;
 
     $pdo = DataConnector::get_connection();
-    //$stmt = $pdo->prepare("SELECT * FROM pos_product WHERE product_code LIKE :search ORDER BY product_title ASC LIMIT :limit OFFSET :offset ");
     $stmt = $pdo->prepare("SELECT product.id, product.product_title, product.sku, product.price, product.tax_group, product.is_active, tax_group.tax_types FROM product INNER JOIN tax_group ON tax_group.id = product.tax_group WHERE product.sku LIKE :search ORDER BY product.product_title ASC LIMIT :limit OFFSET :offset ");
     $stmt->execute([
       ':search' => $search_term . '%',
@@ -38,14 +38,12 @@ Class Product_Controller {
       $iArr['tax_group'] = $obj->tax_group;
       $iArr['is_active'] = $obj->is_active;
 
-
       array_push($arr, $iArr);
     }
-
     $response['products'] = $arr;
 
     //  get the total row count for pagination
-    $stmt = $pdo->prepare("SELECT id FROM pos_product WHERE product_code LIKE :search");
+    $stmt = $pdo->prepare("SELECT id FROM product WHERE sku LIKE :search");
     $stmt->execute([
       ':search' => $search_term . '%'
     ]);
@@ -53,7 +51,6 @@ Class Product_Controller {
     $response['rowCount'] = $count;
 
     print json_encode($response);
-
   }
 
   //  private functions

@@ -1,13 +1,21 @@
 <?php
 
+use Brick\Money\Money;
+
 Class Folio{
-  //$id, $customer, and $reservaton are from the folio table
   private $id;
+  //  $customer is retreived from customer table
   private $customer;
+  //  $sales is retreived from sale table
   private $sales;
+  //  $currency_code is retreived from options table
+  private $currency_code;
   
 
   public function __construct( $id ) {
+
+    $this->get_currency_code();
+
     $this->sales = array();
     $pdo = DataConnector::get_connection();
 
@@ -40,9 +48,9 @@ Class Folio{
       $stmt2->execute();
       while($obj2 = $stmt2->fetch(PDO::FETCH_OBJ)){
         $arr2 = array();
-        $arr2['sale_id'] = $obj2->id;
+        $arr2['payment_id'] = $obj2->id;
         $arr2['type_id'] = $obj2->payment_type;
-        $arr2['amount'] = $obj2->payment_amount;
+        $arr2['amount'] = Money::ofMinor($obj2->payment_amount, $this->currency_code)->getAmount();
         $arr2['date'] = $obj2->payment_date;
         $arr2['ref'] = $obj2->payment_ref;
         $arr2['type'] = $obj2->payment_title;
@@ -57,9 +65,11 @@ Class Folio{
         $arr3 = array();
         $arr3['id'] = $obj3->id;
         $arr3['quantity'] = $obj3->quantity;
-        $arr3['unit_price'] = $obj3->unit_price;
-        $arr3['subtotal'] = $obj3->subtotal;
-        $arr3['tax'] = $obj3->tax;
+        $arr3['unit_price'] = Money::ofMinor($obj3->unit_price, $this->currency_code)->getAmount();
+        $arr3['subtotal'] = Money::ofMinor($obj3->subtotal, $this->currency_code)->getAmount();
+        $arr3['tax'] = Money::ofMinor($obj3->tax, $this->currency_code)->getAmount();
+        $total = $obj3->subtotal + $obj3->tax;
+        $arr3['total'] = Money::ofMinor($total, $this->currency_code)->getAmount();
         $arr3['tax_spread'] = json_decode($obj3->tax_spread);
         $arr3['product'] = $obj3->product_title;
         $arr3['sku'] = $obj3->sku;
@@ -68,8 +78,6 @@ Class Folio{
       }
     }
     array_push($this->sales, $arr);
-
-
   }
 
   public function get_id(){
@@ -81,6 +89,17 @@ Class Folio{
     $arr['id'] = $this->id;
     $arr['customer'] = $this->customer;
     $arr['sales'] = $this->sales;
+    $arr['currency_code'] = $this->currency_code;
     return $arr;
+  }
+
+  //  PRIVATE FUNCTIONS
+
+  private function get_currency_code() {
+    $pdo = DataConnector::get_connection();
+    $stmt=$pdo->prepare("SELECT option_value FROM options WHERE option_name = 'currency_code'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+    $this->currency_code = $result->option_value;
   }
 }
