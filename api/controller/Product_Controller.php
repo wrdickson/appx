@@ -1,10 +1,23 @@
 <?php
 
+use Brick\Money\Money;
+
 Class Product_Controller {
 
   //  public functions
 
   public function search_products_by_sku ( $f3 ) {
+
+    //  get currency units
+    $pdo = DataConnector::get_connection();
+    $stmt=$pdo->prepare("SELECT option_value FROM options WHERE option_name = 'currency_code'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+    $currency_code = $result->option_value;
+
+    //  instantiate an array that will hold all applicable tax types
+    $applicable_tax_types = array();
+
     //  set the permission level on this action
     $perms = [ 'permission' => 3, 'role' => 'search_products' ];
     //  throws an error and stops execution if auth fails
@@ -34,9 +47,17 @@ Class Product_Controller {
       $iArr['id'] = $obj->id;
       $iArr['product_title'] = $obj->product_title;
       $iArr['sku'] = $obj->sku;
-      $iArr['price'] = $obj->price;
+      $iArr['price'] = Money::ofMinor($obj->price, $currency_code)->getAmount();
       $iArr['tax_group'] = $obj->tax_group;
+      $iArr['tax_types'] = json_decode($obj->tax_types);
       $iArr['is_active'] = $obj->is_active;
+
+      //  keep the applicable tax_types array current
+      foreach ($iArr['tax_types'] as $tax_type) {
+        if( !in_array($tax_type, $applicable_tax_types) ) {
+          array_push($applicable_tax_types, $tax_type);
+        }
+      }
 
       array_push($arr, $iArr);
     }
@@ -49,6 +70,38 @@ Class Product_Controller {
     ]);
     $count = $stmt->rowCount();
     $response['rowCount'] = $count;
+
+    //  add applicable tax types
+    $response['applicable_tax_types'] = $applicable_tax_types;
+    //  build an array-ish string for the query: we're looking for "(1,6,7)" format
+    $arr_str = "";
+    $arr_str .="(";
+    foreach( $applicable_tax_types as $tt) {
+      $arr_str .= $tt;
+      $arr_str .= ",";
+    }
+    //  strip the last comma
+    $arr_str = rtrim($arr_str, ","); 
+    $arr_str .= ")";
+    //$response['arr_str'] = $arr_str;
+    //  don't do anything if we don't have any results
+    if( count($applicable_tax_types) > 0 ){
+      $sql = "SELECT * FROM tax_type WHERE id IN " . $arr_str . ";";
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute();
+      $response['tax_types'] = array();
+      $arr = array();
+      while($obj = $stmt->fetch(PDO::FETCH_OBJ)){
+        $arr['id'] = $obj->id;
+        $arr['tax_title'] = $obj->tax_title;
+        $arr['rate'] = $obj->rate;
+        $arr['is_active'] = $obj->is_active;
+        $response['tax_types'][$obj->id] = $arr;
+      }
+    } else {
+      //  empty array
+      $response['tax_types'] = array();
+    }
 
     print json_encode($response);
   }
