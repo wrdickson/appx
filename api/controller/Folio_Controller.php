@@ -11,6 +11,8 @@ Class Folio_Controller {
     $customer = new Customer($folio->to_array()['customer']);
     $response['customer'] =  $customer->to_array();
 
+    $response['active_payment_types'] = Payment_Types::get_active_payment_types();
+
 
 
     print json_encode($response);

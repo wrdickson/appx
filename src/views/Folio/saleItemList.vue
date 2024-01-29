@@ -1,7 +1,12 @@
 <template>
   <div>
     <h3>Sale Items</h3>
-    <el-table :data="stagedSaleItems" size="small" style="width:100%;">
+    <el-table 
+      :data="stagedSaleItems"
+      size="small"
+
+      show-summary
+      style="width:100%;">
       <el-table-column prop="product_title" label="Title"/>
       <el-table-column prop="sku" label="sku" width="80"/>
       <el-table-column prop="quantity" label="qty" width="60"/>
@@ -30,6 +35,7 @@
   const roundingMode = optionsStore().autoloadOptions.default_rounding_mode
 
   const debug = ref(true)
+
 
   const handleRemoveItem = ( scope => {
     //console.log('scope', scope)

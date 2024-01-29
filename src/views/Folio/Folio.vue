@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="10">
-    <el-col :xs="24" :sm="12">
+    <el-col :xs="24" :sm="14">
       <h1>Post Sale:</h1>
       <SearchProductCode
         @selectProduct = productSelected
@@ -15,9 +15,16 @@
       />
       <SaleItemList
         :stagedSaleItems="stagedSaleItems"
+        @sale-items:remove-at-index="removeStagedItemAtIndex"
       />
+      <CompleteSale
+        v-if="stagedItemsExist"
+        :stagedSaleItems="stagedSaleItems"
+        :activePaymentTypes="activePaymentTypes"
+        @completeSale = completeSale
+        />
     </el-col>
-    <el-col :xs="24" :sm="12">
+    <el-col :xs="24" :sm="10">
       <h1>Folio: {{customer.first_name}}&nbsp{{customer.last_name}}</h1>
       <div v-for="sale in folio.sales">
         <div>Items:</div>
@@ -60,6 +67,7 @@
   import SaleItemStage from '@/views/Folio/saleItemStage.vue'
   import { optionsStore } from '@/stores/optionsStore.js'
   import Decimal from 'decimal.js-light'
+  import CompleteSale from '@/views/Folio/completeSale.vue'
 
   const route = useRoute()
 
@@ -75,6 +83,7 @@
 
   //  refs
 
+  const activePaymentTypes = ref([])
   const applicableTaxTypes = ref({})
   const customer = ref({})
   const folio = ref({})
@@ -88,6 +97,14 @@
 
   const currencyMinorUnits = computed( () => {
     return parseInt(optionsStore().autoloadOptions.currency_fraction_digits)
+  })
+
+  const stagedItemsExist = computed( () => {
+    if( stagedSaleItems.value.length > 0 ) {
+      return true
+    } else {
+      return false
+    }
   })
 
   //  methods
@@ -134,8 +151,17 @@
     stagedItem.value = {}
   }
 
+  const completeSale = ( payments ) => {
+    console.log(completeSale)
+  }
+
   const productSelected = ( product ) => {
     stagedItem.value = product
+  }
+
+  const removeStagedItemAtIndex = ( index ) => {
+    console.log('index', index)
+    stagedSaleItems.value.splice(index, 1)
   }
 
   const setApplicableTaxTypes = t_types=> {
@@ -182,6 +208,7 @@
     folioData.getFolio(route.params.id).then(response => {
       customer.value = response.data.customer
       folio.value = response.data.folio
+      activePaymentTypes.value = response.data.active_payment_types
     }).catch( error => {
       loadingCreate.value = false
       ElMessage({

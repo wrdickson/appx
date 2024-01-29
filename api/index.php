@@ -16,6 +16,7 @@ require 'lib/Reservation.php';
 require 'lib/Folios.php';
 require 'lib/Folio.php';
 require 'lib/Validate.php';
+require 'lib/Payment_Types.php';
 
 
 //  instantiate $f3 
@@ -56,6 +57,9 @@ $f3->route('POST /folio/@id', 'Folio_Controller->get_folio');
 
 //  OPTIONS
 $f3->route('GET /autoload-options', 'Options_Controller->get_autoload_options');
+
+//  PAYMENT_TYPE
+$f3->route('POST /get-active-payment-types', 'Payment_Type_Controller->get_active_payment_types');
 
 //  PRODUCT
 $f3->route('POST /product/search', 'Product_Controller->search_products_by_sku');
