@@ -21,7 +21,7 @@
         v-if="stagedItemsExist"
         :stagedSaleItems="stagedSaleItems"
         :activePaymentTypes="activePaymentTypes"
-        @completeSale = completeSale
+        @submit-sale = submitSale
         />
     </el-col>
     <el-col :xs="24" :sm="10">
@@ -151,10 +151,6 @@
     stagedItem.value = {}
   }
 
-  const completeSale = ( payments ) => {
-    console.log(completeSale)
-  }
-
   const productSelected = ( product ) => {
     stagedItem.value = product
   }
@@ -166,6 +162,24 @@
 
   const setApplicableTaxTypes = t_types=> {
     applicableTaxTypes.value = t_types
+  }
+
+  const submitSale = ( items, payments ) => {
+    //  format payments to minor units and int
+    _.each(payments, payment => {
+      payment.amount = parseInt(toMinorUnits(payment.amount))
+    })
+    //  get pertinant folio data
+    const saleFolio = {
+      id: folio.value.id,
+      customer: folio.value.customer
+    }
+    //  submit the sale
+    folioData.postFolioSale( items, payments, saleFolio).then( response => {
+
+    }).catch( error => {
+
+    })
   }
 
   const toFormatString = val => {

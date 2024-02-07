@@ -54,6 +54,7 @@ $f3->route('POST /customers/', 'Customer_Controller->create_customer');
 
 //  FOLIOS
 $f3->route('POST /folio/@id', 'Folio_Controller->get_folio');
+$f3->route('POST /folio-post-sale', 'Folio_Controller->post_folio_sale');
 
 //  OPTIONS
 $f3->route('GET /autoload-options', 'Options_Controller->get_autoload_options');

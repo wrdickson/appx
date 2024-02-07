@@ -4,7 +4,6 @@
     <el-table 
       :data="stagedSaleItems"
       size="small"
-
       show-summary
       style="width:100%;">
       <el-table-column prop="product_title" label="Title"/>

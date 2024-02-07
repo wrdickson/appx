@@ -4,6 +4,7 @@
     v-if="stagedPaymentsExist"
     :data="stagedPaymentsF"
     size="small"
+    show-summary
     >
     <el-table-column prop="title" label="Payment"/>
     <el-table-column prop="amount" label="Amount"/>
@@ -39,15 +40,33 @@
       <el-button @click="addPayment(paymentRef)">Add Payment</el-button>
     </el-form-item>
   </el-form>
+  <el-form>
+    <el-row :gutter="10">
+      <el-col :span="12">
+        <el-form-item label="payment total">
+          <el-input disabled v-model="paymentTotal"/>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12">
+        <el-form-item>
+          <el-button v-if="paymentsEqualSales" @click="submitSale">Post Sale</el-button>
+        </el-form-item>
+      </el-col>
+    </el-row>
+  </el-form>
+  <div>pit: {{paymentsEqualSales}}</div>
+  <div>stagedItemsTotal: {{stagedItemsTotal}}</div>
+
 </template>
 
 <script setup>
   import { computed, onMounted, reactive, ref, watch } from 'vue'
   import _ from 'lodash'
   import { optionsStore } from '@/stores/optionsStore.js'
+  import Decimal from 'decimal.js-light'
 
   const props = defineProps(['activePaymentTypes','stagedSaleItems'])
-  const emit = defineEmits(['completeSale'])
+  const emit = defineEmits(['submit-sale'])
 
   //  refs
 
@@ -58,13 +77,37 @@
 
   //  this is the ref of the form for validation
   const paymentRef = ref()
-  
+
   const stagedPayments = ref([])
 
   //  computed
 
   const currencyMinorUnits = computed( () => {
     return parseInt( optionsStore().autoloadOptions.currency_fraction_digits )
+  })
+
+  const paymentTotal = computed( () => {
+    let total = new Decimal(0)
+    let t = 0
+    _.each(stagedPayments.value, sp => {
+      console.log('got one:', sp.amount, total)
+      total = new Decimal(total.plus(sp.amount))
+      console.log('total after add', total)
+      
+    })
+    //  this is a string
+    
+    return total.toNumber().toFixed(currencyMinorUnits.value)
+  })
+
+  const paymentsEqualSales = computed( () => {
+    const payments = new Decimal(paymentTotal.value)
+    const total = new Decimal(stagedItemsTotal.value)
+    return payments.equals(total)
+  })
+
+  const paymentTotalType = computed( () => {
+    return typeof(paymentTotal.value)
   })
 
   const stagedPaymentsF = computed( () => {
@@ -101,6 +144,16 @@
     return props.stagedSaleItems.length
   })
 
+  const stagedItemsTotal = computed( () => {
+    const si = _.cloneDeep(props.stagedSaleItems)
+    let total = Decimal(0)
+    _.each( si, item  => {
+      console.log('item:', item)
+      total = total.plus(parseFloat(item.total_f))
+    })
+    return total
+  })
+
   const stagedPaymentsExist = computed( () => {
     if( stagedPayments.value.length > 0 ) {
       return true
@@ -121,7 +174,6 @@
           paymentType: '',
           amount: ''
         }
-
       } else {
         console.log('invalid')
       }
@@ -154,7 +206,12 @@
     }
   }
 
-  //  form validation rules after validation methods
+  const submitSale = () => {
+    console.log('spv', _.cloneDeep(stagedPayments.value))
+    emit( 'submit-sale', _.cloneDeep(props.stagedSaleItems ), _.cloneDeep(stagedPayments.value) )
+  }
+
+  //  form validation rulesmust be after validation methods
 
   const paymentRules = reactive({
     amount: [

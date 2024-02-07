@@ -45,7 +45,7 @@ Class Folio{
 
       /*
       *  handle the case where browser is pointed to a folio that doesn't exist
-      *  if that's the case, we throw a 500 error "$arr does not exist"
+      *  if that's the case, and we don't handle it, a 500 error "$arr does not exist"
       *  TODO this could be better handled
       */
       if($arr) {
