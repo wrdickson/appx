@@ -49,7 +49,7 @@ export default {
 
 <style>
   .unassignedBlock {
-    color: rgb(194, 194, 194);
+    color: #26a8a8;
     width: 100%;
     padding-right: 4px;
     padding-left: 4px;

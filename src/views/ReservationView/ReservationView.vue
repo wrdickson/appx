@@ -7,26 +7,23 @@
     <div>empty</div>
   </el-dialog>
   <div v-if="rootSpaces" class="wrapper">
-    <h3>{{ selectedReservation.customer_first }}&nbsp{{ this.selectedReservation.customer_last }}</h3>
-    <div>
-      <span>{{ selectedReservation.checkin }}</span>
-      <span> : </span>
-      <span>{{ selectedReservation.checkout }}</span>
-    </div>
-    <div v-if="rootSpace">{{ $t('message.spaceLabel') }}: {{ rootSpace.title }}</div>
-    <div>{{ $t('message.people') }}: {{ selectedReservation.people }}</div>
-    <div>{{ $t('message.beds') }}: {{ selectedReservation.beds }}</div>
-    <div>Res Id : {{ selectedReservation.id }}</div>
-    <!--
-    <div>
-      <span v-if="selectedReservation.status == 0">
-        <el-button type="success" @click="reservationCheckin">{{ $t('message.checkin') }}</el-button>
-      </span>
-      <span v-if="selectedReservation.status == 1">
-        <el-button type="info" @click="reservationCheckout">{{ $t('message.checkout') }}</el-button>
-      </span>
-    </div>
-    -->
+    <el-row>
+      <el-col :span="12">
+        <h3>{{ selectedReservation.customer_first }}&nbsp{{ this.selectedReservation.customer_last }}</h3>
+        <div>
+          <span>{{ selectedReservation.checkin }}</span>
+          <span> : </span>
+          <span>{{ selectedReservation.checkout }}</span>
+        </div>
+        <div v-if="rootSpace">{{ $t('message.spaceLabel') }}: {{ rootSpace.title }}</div>
+        <div>{{ $t('message.people') }}: {{ selectedReservation.people }}</div>
+        <div>{{ $t('message.beds') }}: {{ selectedReservation.beds }}</div>
+        <div>Res Id : {{ selectedReservation.id }}</div>
+      </el-col>
+      <el-col :span="12">
+        <el-button @click="loadFolio" style="float: right">Folio</el-button>
+      </el-col>
+    </el-row>
     <el-collapse>
       <el-collapse-item title="Edit Reservation" name="2">
         <EditReservation
@@ -121,6 +118,14 @@
       }
     },
     methods: {
+      loadFolio () {
+        const els = document.querySelectorAll("li.is-active")
+        //  remove 'is-active' class from main menu items
+        _.each(els, el => {
+          el.classList.remove('is-active')
+        })
+        this.$router.push('folio/' + this.selectedReservation.folio)
+      },
       modifyReservation1 ( args ) {
         //console.log('reservationview gets command')
         //console.table( args )

@@ -2,7 +2,6 @@
   <el-table
     ref="resViewTable"
     :data="tableData"
-    border
     :row-style="rowStyle"
     :height="tableHeight"
     row-class-name="resview-row"
@@ -119,7 +118,7 @@ export default {
       this.$refs.resViewTable.$refs.scrollBarRef.setScrollTop(topS)
     },
     c1ToggleShowChildren ( spaceId ) {
-      console.log('resViewTable toggle', spaceId)
+      //console.log('resViewTable toggle', spaceId)
       //  tell resView to toggle this
       this.$emit('resview-toggle-show-children', spaceId)
     },
@@ -152,12 +151,12 @@ export default {
         })
         if( children ) {
           _.each(children, ( child ) => {
-            console.log('child', child.id)
+            //console.log('child', child.id)
             childrenArr.push( child.id )
             getChildren( child.id )
           })
         } else {
-          console.log('cArr', childrenArr)
+          //console.log('cArr', childrenArr)
           return childrenArr
         }
       }
@@ -201,13 +200,13 @@ export default {
   },
   watch: {
     resSpaceCopy (old, newd){
-      console.log('resSpaceCopy change on resViewTable')
+      //console.log('resSpaceCopy change on resViewTable')
     },
     tableData ( ) {
-      console.log('tableData wach triggered on resViewTable')
+      //console.log('tableData wach triggered on resViewTable')
     },
     trigger () {
-      console.log('trigger watch on resViewTable', this.trigger)
+      //console.log('trigger watch on resViewTable', this.trigger)
     }
   }
 }

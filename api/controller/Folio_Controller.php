@@ -23,6 +23,32 @@ Class Folio_Controller {
     $response['items'] = $params->items;
     $response['payments']= $params->payments;
     $response['folio'] = $params->folio;
+    $response['sold_by'] = $params->sold_by;
+
+    $folio_id = $params->folio->id;
+    $sold_by = $params->sold_by->id;
+    $items = $params->items;
+    $payments = $params->payments;
+
+    //  instantiate folio
+    $folio = new Folio($folio_id);
+    $response['initial_folio'] = $folio->to_array();
+
+    /*  Validate:
+    *     a. folio id, customer matches db
+    *     b. sold_by (user) data matches db
+    *     c. item:  id matches sku and description[?]
+                    tax_types is corredt
+    *               unit price and qty are integers
+    *               tax, tax_spread, subtotal, and total calculations are correct
+    *     d. payments:  payment types match db
+    *                   totals are integers
+    *                   total equals total of items
+    */
+
+    //  use folio object to post sale and regenerate totals
+    $response['post_sale'] = $folio->post_folio_sale( $sold_by, $items, $payments );
+
 
     print json_encode($response);
   }

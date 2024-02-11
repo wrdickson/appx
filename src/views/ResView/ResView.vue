@@ -371,7 +371,7 @@ export default {
         loading.close()
         //console.log('res fetch from rv3 getR()')
         this.reservations = response.data.reservations
-        this.componentTrigger += 1
+        this.trigger += 1
       }).catch( error => {
           loading.close()
           this.handleRequestError(error)
@@ -443,7 +443,7 @@ export default {
       const reactiveSelectedReservation = _.find(this.reservations, function(o){
         return o.id == resId
       })
-      console.log('selRES @ res', _.cloneDeep(reactiveSelectedReservation))
+      //console.log('selRES @ res', _.cloneDeep(reactiveSelectedReservation))
       this.selectedReservation = {...reactiveSelectedReservation}
       this.$emit('reservation-selected', _.cloneDeep(reactiveSelectedReservation) )
       this.showCreateReservation = false
@@ -501,6 +501,7 @@ export default {
   },
   watch: {
     reloadTrigger ( newVal ) {
+      //console.log('ResView reload trigger watch triggered')
       this.getReservations()
     }
 

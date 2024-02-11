@@ -21,7 +21,8 @@ export const folioData = {
       data: {
         items: items,
         payments: payments,
-        folio: folio
+        folio: folio,
+        sold_by: authStore().account
       },
       headers: {
         jwt: authStore().token

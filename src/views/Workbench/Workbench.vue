@@ -1,7 +1,9 @@
 <template>
-  <el-button @click="clickResTab"></el-button>
-  <splitpanes vertical class="default-theme" style="height: 100%;">
-    <pane size="33" style="height: 100%;">
+  <!--
+  <el-button @click="clickResTab">isDark = {{isDark}}</el-button>
+  -->
+  <splitpanes vertical class="default-theme" style="height: 100%">
+    <pane size="33" style="height: 100%">
       <div>
         <el-tabs type="border-card" ref="tabsRef">
           <el-tab-pane label="Create">
@@ -18,7 +20,10 @@
         </el-tabs>
       </div>
     </pane>
-    <pane size="67" style="background-color: #1c1b22;">
+    <pane
+      size="67"
+      :class="{darkpane: isDark, lightpane: !isDark}"
+    >
       <ResView
         @reservationSelected="reservationSelected"
         :reloadTrigger="resViewReloadTrigger"
@@ -37,6 +42,8 @@
   import CreateReservation from '@/views/CreateReservation/CreateReservation.vue'
   import ReservationView from '@/views/ReservationView/ReservationView.vue'
   import _ from 'lodash'
+  //  dark theme
+  import { useDark } from '@vueuse/core'
 
   //  REFS
   const windowHeight = ref(0)
@@ -47,8 +54,11 @@
   const resTabRef = ref()
   const tabsRef = ref()
 
+  const isDark = useDark()
+
   //  METHODS
   const reloadReservations = () => {
+    console.log('Workbench gets reload trigger')
     resViewReloadTrigger.value += 1
   }
 
@@ -81,6 +91,14 @@
     min-width: 10px;
     background-color: #409eff !important;
     border-left: 0px !important;
+  }
+
+  .darkpane {
+    background-color: #1c1b22 !important;
+  }
+
+  .lightpane {
+    background-color: #ffffff !important;
   }
   
 </style>

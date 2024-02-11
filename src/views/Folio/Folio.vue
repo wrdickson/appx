@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="10">
-    <el-col :xs="24" :sm="14">
+    <el-col :xs="24" :sm="12">
       <h1>Post Sale:</h1>
       <SearchProductCode
         @selectProduct = productSelected
@@ -24,8 +24,11 @@
         @submit-sale = submitSale
         />
     </el-col>
-    <el-col :xs="24" :sm="10">
+    <el-col :xs="24" :sm="12">
       <h1>Folio: {{customer.first_name}}&nbsp{{customer.last_name}}</h1>
+      <div v-if="folio && folio.sales && folio.sales.length == 0">
+        No sales
+      </div>
       <div v-for="sale in folio.sales">
         <div>Items:</div>
         <el-table
@@ -50,7 +53,7 @@
           <el-table-column prop="type" label="Type"/>
           <el-table-column prop="amount" label="Amount"/>
         </el-table>
-        <hr/>
+        <hr style="color: #409eff"/>
       </div>
     </el-col>
   </el-row>
@@ -144,7 +147,6 @@
 
     // clear staged item
     stagedItem.value = {}
-    
   }
 
   const clearStagedItem = () => {
@@ -176,7 +178,16 @@
     }
     //  submit the sale
     folioData.postFolioSale( items, payments, saleFolio).then( response => {
+      console.log('back from post', response.data)
+      if( response.data.post_sale && response.data.post_sale.success == true){
+        //  update folio
+        folio.value = response.data.post_sale.updated_folio
+        //  clear staged item
+        stagedItem.value = {}
+        stagedSaleItems.value = []
+      } else {
 
+      }
     }).catch( error => {
 
     })

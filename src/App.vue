@@ -69,6 +69,9 @@
   import { spaceTypesData } from '@/data/spaceTypes.js'
   import { spaceTypeStore } from '@/stores/spaceTypeStore.js'
 
+  //  dark theme
+  import { useDark, useToggle } from '@vueuse/core'
+
   //  PROPS
   const props = defineProps(['autoloadOptions'])
 
@@ -94,7 +97,6 @@
 
   //  HANDLE DARK/LIGHT TOGGLE
   //  this is the magic that makes the dark/light toggle possible
-  import { useDark, useToggle } from '@vueuse/core'
   const isDark = useDark()
   //  the ui experience triggers this
   //  we add class="dark" to index.html to make this work

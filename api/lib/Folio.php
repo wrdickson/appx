@@ -7,16 +7,14 @@ Class Folio{
   //  $customer is retreived from customer table
   private $customer;
   //  $sales is retreived from sale table
-  private $sales;
+  private $sales = array();
   //  $currency_code is retreived from options table
   private $currency_code;
-  
 
   public function __construct( $id ) {
 
     $this->get_currency_code();
 
-    $this->sales = array();
     $pdo = DataConnector::get_connection();
 
     //first get the basics: id, customer
@@ -28,9 +26,115 @@ Class Folio{
       $this->customer = $obj->customer;
       
     }
-      //  1. sales:
+
+    $this->get_sales();
+
+  }
+
+  public function get_id () {
+    return $this->id;
+  }
+
+  /**
+   * Post a sale (where items total matches payments total)
+   * Assumes that $sold_by, $items, and $payments have been validated
+   * 
+   * @param $sold_by integer the account_id of who made the sale
+   * @param $items array items with totals, taxes, and tax_spread array in currency minor units
+   * @param $payments array payments with totals in currency minor units
+   * 
+   * @return array 
+   */
+  public function post_folio_sale( $sold_by, $items, $payments ) {
+    $post_response = array();
+    try{
+      $pdo = DataConnector::get_connection();
+      $pdo->beginTransaction();
+
+      //  1.  insert a sale and get a sale_id
+      $now = date("Y-m-d H:i:s"); 
+      $stmt = $pdo->prepare("INSERT INTO sale (folio, sold_by, sale_date) VALUES ( :f, :sb, :n )");
+      $stmt->execute(array(
+        ':f' => $this->id,
+        ':sb' => $sold_by,
+        ':n' => $now
+      ));
+      $sale_id = $pdo->lastInsertId();
+      $post_response['sale_id'] = $sale_id;
+
+      //  2.  iterate through items and insert
+      foreach( $items as $item ) {
+        $stmt = $pdo->prepare("INSERT INTO sale_item(sale, product, quantity, unit_price, subtotal, tax, tax_spread) VALUES (:sa, :p, :q, :up, :sbt, :t, :ts )");
+        $stmt->execute(array(
+          ':sa' => $sale_id,
+          ':p' => $item->product,
+          ':q' => $item->quantity,
+          ':up' => $item->unit_price,
+          ':sbt' => $item->subtotal,
+          ':t' => $item->tax,
+          ':ts' => json_encode($item->tax_spread)
+        ));
+      }
+
+      //  3.  iterate through paynents and insert
+      foreach( $payments as $payment ) {
+        $stmt = $pdo->prepare("INSERT INTO payment (sale, payment_type, payment_amount, payment_date, payment_ref) VALUES ( :sa, :pt, :pa, :pd, :pr )");
+        $stmt->execute(array(
+          ':sa' => $sale_id,
+          ':pt' => $payment->paymentType,
+          ':pa' => $payment->amount,
+          ':pd' => $now,
+          //  payment_ref is an 'expansion slot' where we can, in the future,
+          //  add a reference to, say, the reference value of a credit card sale
+          //  it could be null in db, but let's make it an empty string
+          ':pr' => ''
+        ));
+      }
+
+      //  4.  commit and fetch updated sales
+
+      $pdo->commit();
+      $this->get_sales();
+      $post_response['success'] = true;
+      $post_response['updated_folio'] = $this->to_array();
+      
+    } catch ( PDOException $e ) {
+      $pdo->rollback();
+      $post_response['success'] = false;
+      $post_response['error'] = $e->getMessage();
+    }
+    
+
+    //  5.  send a response
+    return $post_response;
+  }
+  
+  public function to_array () {
+    $arr = array();
+    $arr['id'] = $this->id;
+    $arr['customer'] = $this->customer;
+    $arr['sales'] = $this->sales;
+    $arr['currency_code'] = $this->currency_code;
+    return $arr;
+  }
+
+  //  PRIVATE FUNCTIONS
+
+  private function get_currency_code () {
+    $pdo = DataConnector::get_connection();
+    $stmt=$pdo->prepare("SELECT option_value FROM options WHERE option_name = 'currency_code'");
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+    $this->currency_code = $result->option_value;
+  }
+
+  private function get_sales () {
+    $this->sales = array();
+    $pdo = DataConnector::get_connection();
+
+    //  1. sales:
     $stmt = $pdo->prepare("SELECT * FROM sale WHERE folio = :i");
-    $stmt->bindParam(':i', $id);
+    $stmt->bindParam(':i', $this->id);
     $i = $stmt->execute();
     $sales = array();
     while($obj = $stmt->fetch(PDO::FETCH_OBJ)) {
@@ -41,13 +145,10 @@ Class Folio{
       $arr['sale_date'] = $obj->sale_date;
       $arr['payments'] = array();
       $arr['items'] = array();
-      
 
-      /*
-      *  handle the case where browser is pointed to a folio that doesn't exist
-      *  if that's the case, and we don't handle it, a 500 error "$arr does not exist"
-      *  TODO this could be better handled
-      */
+      //  handle the case where user is requesting a folio that doesn't exist.
+      //  if that's the case, and we don't handle it, a 500 error "$arr does not exist"
+      //  TODO this could be better handled
       if($arr) {
 
         //  get payments per sale
@@ -87,28 +188,5 @@ Class Folio{
       }
       array_push($this->sales, $arr);
     }
-  }
-
-  public function get_id(){
-    return $this->id;
-  }
-  
-  public function to_array(){
-    $arr = array();
-    $arr['id'] = $this->id;
-    $arr['customer'] = $this->customer;
-    $arr['sales'] = $this->sales;
-    $arr['currency_code'] = $this->currency_code;
-    return $arr;
-  }
-
-  //  PRIVATE FUNCTIONS
-
-  private function get_currency_code() {
-    $pdo = DataConnector::get_connection();
-    $stmt=$pdo->prepare("SELECT option_value FROM options WHERE option_name = 'currency_code'");
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_OBJ);
-    $this->currency_code = $result->option_value;
   }
 }
